@@ -6,10 +6,13 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { File, NotebookPen } from "lucide-react"
+import { Bomb, Eye, File, Home, MoreHorizontal, NotebookPen, Telescope, Trash } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 
 // Menu items.
 const items = [
@@ -33,7 +36,7 @@ const items = [
     title: "Plano de treino para ganhar massa muscular",
     url: "#",
   },
-  
+
 ]
 
 export function AppSidebar() {
@@ -46,12 +49,27 @@ export function AppSidebar() {
             <SidebarMenu className="mt-4">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton className="rounded-[6px]" asChild>
+                    <a href="#">
                       <File />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuAction className="rounded-[6px]">
+                        <MoreHorizontal />
+                      </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="font-[family-name:var(--font-geist-sans)] rounded-[6px]" side="right" align="start">
+                      <DropdownMenuItem className="rounded-[6px]">
+                        <span>View Note</span> <Telescope />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="group rounded-[6px] hover:text-red-500">
+                        <span>Delete Project</span> <Bomb />
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

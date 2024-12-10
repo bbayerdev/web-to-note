@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
 
-      <div className="p-40 gap-5 flex flex-col">
+      <div className="px-40 py-20 gap-5 flex flex-col">
         <div className="flex  justify-between">
           <h1 className="text-4xl font-bold">
             Your-Note <span className="text-neutral-600 text-3xl font-[family-name:var(--font-geist-mono)]">#1</span>
