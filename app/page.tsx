@@ -7,12 +7,13 @@ export default function Home() {
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
 
-      <div className="px-40 py-20 gap-5 flex flex-col">
-        <div className="flex  justify-between">
-          <h1 className="text-4xl font-bold">
-            Your-Note <span className="text-neutral-600 text-3xl font-[family-name:var(--font-geist-mono)]">#1</span>
+      <div className="px-40 py-14 gap-5 flex flex-col">
+        <div className="flex flex-col gap-2">
+          <p className=" text-sm text-neutral-600 font-bold font-[family-name:var(--font-geist-mono)]">{currentDate.toString()}</p>
+          <h1 className="text-4xl mt-2 font-bold">
+            Your-Note <span className="text-neutral-600 text-3xl font-[family-name:var(--font-geist-mono)]">#6</span>
           </h1>
-          <p className="text-sm font-bold">• {currentDate.toString()}</p>
+
         </div>
 
         <p className="text-xl font-[family-name:var(--font-geist-mono)]">
