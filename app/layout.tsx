@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import IcoUser from "@/components/icoUser";
 
 const geistSans = localFont({ // font-[family-name:var(--font-geist-sans)]
   src: "./fonts/GeistVF.woff",
@@ -25,23 +26,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-
         <SidebarProvider>
           <AppSidebar />
 
-          <main>
+          <div className="fixed top-4 right-4 z-50">
+            <IcoUser />
+          </div>
+
+          <div className="flex flex-1 flex-col h-screen">
             <SidebarTrigger />
             {children}
-          </main>
-          
+          </div>
         </SidebarProvider>
-
       </body>
     </html>
   );

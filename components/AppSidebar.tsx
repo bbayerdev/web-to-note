@@ -9,50 +9,46 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Calendar, Home, Inbox, NotebookPen, Search, Settings } from "lucide-react"
+import { File, NotebookPen } from "lucide-react"
 
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "Alimentação para melhorar o desempenho no treino",
     url: "#",
-    icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Estratégias para aumentar a resistência cardiovascular",
     url: "#",
-    icon: Inbox,
   },
   {
-    title: "Calendar",
+    title: "Checklist de exercícios para treino de pernas",
     url: "#",
-    icon: Calendar,
   },
   {
-    title: "Search",
+    title: "Monitoramento de evolução: peso e medidas mensais",
     url: "#",
-    icon: Search,
   },
   {
-    title: "Settings",
+    title: "Plano de treino para ganhar massa muscular",
     url: "#",
-    icon: Settings,
   },
+  
 ]
 
 export function AppSidebar() {
   return (
-    <Sidebar>
-      <SidebarContent className="">
+    <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
+      <SidebarContent className="bg-neutral-900">
         <SidebarGroup>
-          <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold"> <NotebookPen /> Your Notes</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold"> <NotebookPen /> Yuri's Notes</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="mt-4">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
-                      <item.icon />
+                      <File />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
@@ -65,16 +61,3 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
-
-/* 
-{items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-*/
