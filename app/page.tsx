@@ -1,5 +1,8 @@
 'use client'
 
+import { Button } from "@/components/ui/button"
+import { Check } from "lucide-react"
+
 export default function Home() {
 
   const currentDate = new Date().toLocaleDateString()
@@ -9,8 +12,11 @@ export default function Home() {
 
       <div className="px-40 py-14 gap-5 flex flex-col">
         <div className="flex flex-col gap-2">
-          <p className=" text-sm text-neutral-600 font-bold font-[family-name:var(--font-geist-mono)]">{currentDate.toString()}</p>
-          <h1 className="text-4xl mt-2 font-bold">
+          <div className="flex gap-3 justify-between">
+            <p className=" text-sm text-neutral-600 font-bold font-[family-name:var(--font-geist-mono)]">{currentDate.toString()}</p>
+            <Button size={"sm"} variant={"ghost"} className="h-min rounded-[6px] hover:bg-green-500/30 text-green-500 hover:text-gre"> <Check /> Save Note</Button>
+          </div>
+          <h1 className="text-4xl mt-8 font-bold">
             Your-Note <span className="text-neutral-600 text-3xl font-[family-name:var(--font-geist-mono)]">#6</span>
           </h1>
 
