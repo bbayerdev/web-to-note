@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Bomb, Eye, File, FilePlus2, Home, LogOut, MoreHorizontal, NotebookPen, Telescope, Trash } from "lucide-react"
+import { Bomb, File, FilePlus2, LogOut, MoreHorizontal, NotebookPen, Telescope } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Button } from "./ui/button"
@@ -26,61 +26,67 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-
-// Menu items.
-const items = [
-  {
-    title: "Alimentação para melhorar o desempenho no treino",
-    url: "#",
-    number: 1
-  },
-  {
-    title: "Estratégias para aumentar a resistência cardiovascular",
-    url: "#",
-    number: 2
-  },
-  {
-    title: "Checklist de exercícios para treino de pernas",
-    url: "#",
-    number: 3
-  },
-  {
-    title: "Monitoramento de evolução: peso e medidas mensais",
-    url: "#",
-    number: 4
-  },
-  {
-    title: "Plano de treino para ganhar massa muscular",
-    url: "#",
-    number: 5
-  },
-
-]
+// Definindo a interface para a estrutura de uma nota
+interface Items {
+  id: string; // Mudamos para string, pois o id está vindo como uma string
+  tittle: string;
+}
 
 export function AppSidebar() {
+
+   // Tipando corretamente o estado notes como um array de Items
+   const [notes, setNotes] = useState<Items[]>([]); // Para armazenar as notas
+   const [loading, setLoading] = useState(true); // Para indicar se os dados estão carregando
+   const [error, setError] = useState<string | null>(null); // Para capturar erros
+
+   useEffect(() => {
+     // Função assíncrona para buscar as notas
+     const fetchNotes = async () => {
+       try {
+         const response = await axios.get('http://localhost:3001/note'); // Substitua <porta> pela porta correta
+         setNotes(response.data); // Atualiza o estado com as notas recebidas
+
+         console.log("Dados recebidos:", response.data);
+       } catch (err) {
+         setError('Erro ao carregar as notas.'); // Caso haja erro
+       } finally {
+         setLoading(false); // Ao terminar, definimos o loading como false
+       }
+     };
+
+     fetchNotes(); // Chama a função para buscar as notas
+   }, []); // O array vazio significa que o efeito será executado apenas uma vez, após o componente ser montado
+
+   if (loading) return <div>Carregando...</div>; // Exibe uma mensagem enquanto os dados estão sendo carregados
+   if (error) return <div>{error}</div>; // Exibe o erro, se houver
+
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
       <SidebarContent className="bg-neutral-900">
         <SidebarGroup className="mt-2">
           <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold"> <NotebookPen /> Yuri's Notes</SidebarGroupLabel>
-          
+
           <SidebarMenuButton className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
             <a href="/">
-              <FilePlus2 strokeWidth={3} color="#22c55e"/>
+              <FilePlus2 strokeWidth={3} color="#22c55e" />
               <span className="text-green-500 font-bold">Create new note</span>
             </a>
           </SidebarMenuButton>
-          
+
           <SidebarGroupContent>
 
             <SidebarMenu className="mt-3">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+
+              {notes.map((item, index) => ( // Mudamos de items para notes
+                <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton className="rounded-[6px]" asChild>
                     <a href="#">
                       <File />
-                      <span className="text-neutral-600 font-bold">{item.number}#</span> <span>{item.title}</span>
+                      <span className="text-neutral-600 font-bold">{index + 1}#</span> {/* Adiciona o número de cada item */}
+                      <span>{item.tittle}</span>
                     </a>
                   </SidebarMenuButton>
                   <DropdownMenu>
@@ -100,6 +106,7 @@ export function AppSidebar() {
                   </DropdownMenu>
                 </SidebarMenuItem>
               ))}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
