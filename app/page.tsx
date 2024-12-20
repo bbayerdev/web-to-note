@@ -31,43 +31,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
-      <div className="px-40 py-14 gap-5 flex flex-col">
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-3 justify-between">
-            <p className="text-sm text-neutral-600 font-bold font-[family-name:var(--font-geist-mono)]">
-              {currentDate}
-            </p>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-min rounded-[6px] hover:bg-green-500/30 text-green-500 hover:text-gre"
-            >
-              <Check /> Save Note
-            </Button>
-          </div>
-          <div className="flex flex-col py-5">
-            <Textarea
-              ref={textareaRef}
-              value={value}
-              onInput={handleInput}
-              onFocus={handleFocus}
-              className="text-4xl font-bold border-none focus:outline-none focus:ring-0 w-full resize-none"
-            />
-
-            <Textarea
-              ref={lastTextareaRef} // Referência para o último Textarea
-              placeholder="Write your note here..."
-              onInput={(e) => {
-                const target = e.target as HTMLTextAreaElement
-                target.style.height = "auto"
-                target.style.height = `${target.scrollHeight}px`
-              }}
-              className="text-xl font-bold border-none focus:outline-none focus:ring-0 w-full resize-none font-[family-name:var(--font-geist-mono)]"
-            />
-
-          </div>
-        </div>
-      </div>
+      <h1 className="text-3xl">page do login/cadastro</h1>
     </main>
   )
 }
