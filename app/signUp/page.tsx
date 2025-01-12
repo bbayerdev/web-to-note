@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeClosed } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,9 +15,9 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator"
 import { BorderBeam } from "@/components/ui/border-beam"
-
+import { useTheme } from "next-themes";
+import Particles from "@/components/ui/particles"
 
 const schema = z.object({
     email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
@@ -31,6 +31,12 @@ type FormData = {
 
 export default function Home() {
     const [show, setShow] = useState(false)
+    const { resolvedTheme } = useTheme();
+    const [color, setColor] = useState("#ffffff");
+
+    useEffect(() => {
+        setColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
+    }, [resolvedTheme]);
 
     const {
         register,
@@ -46,7 +52,7 @@ export default function Home() {
 
     return (
         <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
-            <Card className="bg-neutral-900 p-1 rounded-xl w-auto h-auto relative">
+            <Card className="bg-neutral-900 p-1 rounded-xl w-auto h-auto relative z-10 shadow-2xl">
                 <CardHeader>
                     <div className="flex flex-col">
                         <div className="flex justify-between">
@@ -142,6 +148,13 @@ export default function Home() {
                 </CardFooter>
                 <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
             </Card>
+            <Particles
+                className="absolute inset-0 z-0"
+                quantity={100}
+                ease={80}
+                color={'#f5f5f5'}
+                refresh
+            />
         </main>
     )
 }
