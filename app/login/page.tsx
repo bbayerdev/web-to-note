@@ -3,9 +3,38 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Eye, EyeClosed } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+
+const schema = z.object({
+    email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
+    password: z.string().nonempty('Please enter your password')
+})
+
+type FormData = {
+    email: string
+    password: string
+}
 
 export default function Home() {
+    const [show, setShow] = useState(false)
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>({
+        resolver: zodResolver(schema),
+    })
+
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    };
+
     return (
         <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)]">
 
@@ -16,29 +45,46 @@ export default function Home() {
                         <CardDescription className="font-[family-name:var(--font-geist-mono)]">Enter your email and password</CardDescription>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                    <div>
-                        <Label>Email</Label>
-                        <Input
-                            className="w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                            placeholder="Your email goes here"
-                        />
-                    </div>
+                <CardContent>
+                    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+                        <div>
+                            <Label>Email</Label>
+                            <Input
+                                className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
+                                placeholder="Your email goes here"
+                                {...register("email")}
+                            />
 
-                    <div>
-                        <Label>Password</Label>
-                        <Input
-                            className="w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                            placeholder="Your secret key"
-                        />
-                        <div className="flex justify-end">
-                            <Link href='#' className="text-xs mt-1 text-muted-foreground hover:underline hover:text-white">Forgot your password?</Link>
+                            {errors.email && <p className="text-xs ml-1 mt-1 text-red-500">{errors.email.message}</p>}
                         </div>
-                    </div>
 
-                    <div>
-                        <Button className="w-full rounded-[6px] h-8 mt-2 hover:bg-green-500">Login</Button>
-                    </div>
+                        <div>
+                            <Label>Password</Label>
+                            <div className="flex-col">
+                                <div className="flex gap-2">
+                                    <Input
+                                        className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
+                                        placeholder="Your secret key"
+                                        type={show ? "text" : "password"}
+                                        {...register("password")}
+                                    />
+
+                                    <Button type="button" onClick={() => setShow(!show)} variant={'secondary'} className="rounded-[6px]">
+                                        {show ? <Eye /> : <EyeClosed />}
+                                    </Button>
+                                </div>
+                                {errors.password && <p className="text-xs ml-1 mt-1 text-red-500">{errors.password.message}</p>}
+                            </div>
+
+                            <div className="flex justify-end">
+                                <Link href='#' className="text-xs mt-1 text-muted-foreground hover:underline hover:text-white">Forgot your password?</Link>
+                            </div>
+                        </div>
+
+                        <div>
+                            <Button type="submit" className="w-full rounded-[6px] mt-2 hover:bg-green-500">Login</Button>
+                        </div>
+                    </form>
                 </CardContent>
                 <CardFooter className="text-center flex justify-center text-sm gap-1 text-muted-foreground">
                     <Label>Need an account?</Label>

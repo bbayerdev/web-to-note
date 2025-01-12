@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye } from "lucide-react";
 
 // Definindo o esquema de validação com Zod
 const schema = z.object({
@@ -57,11 +58,12 @@ const CustomForm = () => {
         <label htmlFor="age" className="block">Age</label>
         <input
           id="age"
-          type="number"
+          type="password"
           {...register("age", { valueAsNumber: true })}
           className="input"
         />
         {errors.age && <span className="text-red-500">{errors.age.message}</span>}
+        <button><Eye/></button>
       </div>
 
       <button type="submit" className="btn">Submit</button>
