@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeClosed } from "lucide-react"
+import { Eye, EyeClosed, Info } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
@@ -18,19 +18,48 @@ import {
 import { BorderBeam } from "@/components/ui/border-beam"
 import { useTheme } from "next-themes";
 import Particles from "@/components/ui/particles"
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
 
-const schema = z.object({
-    email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
-    password: z.string().nonempty('Please enter your password')
-})
+
+const schema = z
+    .object({
+        email: z
+            .string()
+            .email('Invalid email')
+            .nonempty('Email required'),
+        name: z
+            .string()
+            .nonempty('Name is required')
+            .min(4, 'Min 4 characters'),
+        password: z
+            .string()
+            .min(8, 'Min 8 characters')
+            .regex(/[A-Z]/, 'Must include uppercase')
+            .regex(/[0-9]/, 'Must include number')
+            .regex(/[@$!%*?&#]/, 'Must include special char')
+            .nonempty('Password required'),
+        confirmPass: z.string().nonempty('Confirm password'),
+    })
+    .refine((data) => data.password === data.confirmPass, {
+        message: 'Passwords mismatch',
+        path: ['confirmPass'], // Aponta o erro para o campo `confirmPass`
+    });
+
 
 type FormData = {
     email: string
+    name: string
     password: string
+    confirmPass: string
 }
 
 export default function Home() {
     const [show, setShow] = useState(false)
+    const [show2, setShow2] = useState(false)
     const { resolvedTheme } = useTheme();
     const [color, setColor] = useState("#ffffff");
 
@@ -80,7 +109,7 @@ export default function Home() {
                             <Label>Email</Label>
                             <Input
                                 className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                                placeholder="Your email goes here"
+                                placeholder="Your best email goes here"
                                 {...register("email")}
                             />
 
@@ -91,20 +120,34 @@ export default function Home() {
                             <Label>Name</Label>
                             <Input
                                 className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                                placeholder="Your email goes here"
-                                {...register("email")}
+                                placeholder="What should we call you?"
+                                {...register("name")}
                             />
 
-                            {errors.email && <p className="text-xs ml-1 mt-1 text-red-500">{errors.email.message}</p>}
+                            {errors.name && <p className="text-xs ml-1 mt-1 text-red-500">{errors.name.message}</p>}
                         </div>
 
-                        <div>
-                            <Label>Password</Label>
+                        <div className="">
+                            <div className="flex items-center gap-2 pb-1">
+                                <Label>Password</Label>
+                                <HoverCard>
+                                    <HoverCardTrigger>
+                                        <Info strokeWidth={'2'} className="size-3" />
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className="rounded-[6px] text-sm">
+                                        - Min 8 characters <br />
+                                        - Must include uppercase <br />
+                                        - Must include number <br />
+                                        - Must include special char <br />
+                                    </HoverCardContent>
+                                </HoverCard>
+                            </div>
+
                             <div className="flex-col">
                                 <div className="flex gap-2">
                                     <Input
                                         className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                                        placeholder="Your secret key"
+                                        placeholder="Pick a secret password"
                                         type={show ? "text" : "password"}
                                         {...register("password")}
                                     />
@@ -124,16 +167,16 @@ export default function Home() {
                                 <div className="flex gap-2">
                                     <Input
                                         className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                                        placeholder="Your secret key"
-                                        type={show ? "text" : "password"}
-                                        {...register("password")}
+                                        placeholder="Confirm your secret password"
+                                        type={show2 ? "text" : "password"}
+                                        {...register("confirmPass")}
                                     />
 
-                                    <Button type="button" onClick={() => setShow(!show)} variant={'secondary'} className="rounded-[6px]">
-                                        {show ? <Eye /> : <EyeClosed />}
+                                    <Button type="button" onClick={() => setShow2(!show2)} variant={'secondary'} className="rounded-[6px]">
+                                        {show2 ? <Eye /> : <EyeClosed />}
                                     </Button>
                                 </div>
-                                {errors.password && <p className="text-xs ml-1 mt-1 text-red-500">{errors.password.message}</p>}
+                                {errors.confirmPass && <p className="text-xs ml-1 mt-1 text-red-500">{errors.confirmPass.message}</p>}
                             </div>
                         </div>
 
