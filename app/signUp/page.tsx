@@ -16,6 +16,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 
 const schema = z.object({
@@ -44,8 +45,8 @@ export default function Home() {
     };
 
     return (
-        <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)]">
-            <Card className="bg-neutral-900 rounded-[6px]">
+        <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
+            <Card className="bg-neutral-900 p-1 rounded-xl w-auto h-auto relative">
                 <CardHeader>
                     <div className="flex flex-col">
                         <div className="flex justify-between">
@@ -110,7 +111,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        
+
                         <div>
                             <Label>Confirm password</Label>
                             <div className="flex-col">
@@ -139,8 +140,8 @@ export default function Home() {
                     <Label>Already have an account?</Label>
                     <Link className="hover:underline hover:text-white" href={'/login'}>Login now</Link>
                 </CardFooter>
+                <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
             </Card>
-
         </main>
     )
 }

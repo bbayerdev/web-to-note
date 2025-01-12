@@ -9,6 +9,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { BorderBeam } from "@/components/ui/border-beam"
 
 const schema = z.object({
     email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
@@ -36,9 +37,8 @@ export default function Home() {
     };
 
     return (
-        <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)]">
-
-            <Card className="bg-neutral-900 rounded-[6px]">
+        <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
+            <Card className="bg-neutral-900 rounded-xl w-auto h-auto relative p-1">
                 <CardHeader>
                     <div>
                         <CardTitle>Hi there, Welcome back!</CardTitle>
@@ -57,7 +57,6 @@ export default function Home() {
 
                             {errors.email && <p className="text-xs ml-1 mt-1 text-red-500">{errors.email.message}</p>}
                         </div>
-
                         <div>
                             <Label>Password</Label>
                             <div className="flex-col">
@@ -82,7 +81,7 @@ export default function Home() {
                         </div>
 
                         <div>
-                            <Button type="submit" className="w-full rounded-[6px] mt-2 hover:bg-green-500">Login</Button>
+                            <Button type="submit" className="w-full rounded-[6px] mt-2">Login</Button>
                         </div>
                     </form>
                 </CardContent>
@@ -90,8 +89,8 @@ export default function Home() {
                     <Label>Need an account?</Label>
                     <Link className="hover:underline hover:text-white" href={'/signUp'}>Create one now</Link>
                 </CardFooter>
+                <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373"/>
             </Card>
-
         </main>
     )
 }
