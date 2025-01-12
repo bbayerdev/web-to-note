@@ -132,7 +132,7 @@ export default function Home() {
                         </div>
 
                         <div>
-                            <Button type="submit" className="w-full rounded-[6px] mt-2 hover:bg-green-500">Sign up</Button>
+                            <Button type="submit" className="w-full rounded-[6px] mt-2">Sign up</Button>
                         </div>
                     </form>
                 </CardContent>
