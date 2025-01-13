@@ -12,6 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { BorderBeam } from "@/components/ui/border-beam"
 import { useTheme } from "next-themes";
 import Particles from "@/components/ui/particles"
+import axios from 'axios'
+import { toast } from "@/hooks/use-toast"
+import { useRouter } from 'next/navigation';
+import { Toaster } from "@/components/ui/toaster"
 
 
 const schema = z.object({
@@ -41,13 +45,45 @@ export default function Home() {
         resolver: zodResolver(schema),
     })
 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
-    };
 
     useEffect(() => {
         localStorage.clear()
     }, [])
+
+    // async login
+    // async login
+    const [error, setError] = useState<boolean>(false)
+    async function loginUser(data: FormData) {
+        try {
+            const res = await axios.post("http://localhost:3001/login", {
+                email: data.email,
+                senha: data.password
+            });
+
+            if (res.status === 200) {
+                const usuario = res.data.usuario; // agora os dados do usuário virão corretamente
+                console.log(usuario);
+
+                toast({
+                    title: "Login realizado!",
+                    description: "Você será redirecionado em 2 segundos.",
+                    className: 'bg-green-400 border-none',
+                    duration: 2000,
+                });
+
+                setTimeout(() => {
+                    router.push("/note");
+                }, 1900);
+            }
+        } catch (error: any) {
+
+        }
+    }
+    const router = useRouter(); // hook para redirecionamento
+
+    const onSubmit = async (data: FormData) => {
+        await loginUser(data);
+    }
 
     return (
         <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
@@ -122,6 +158,7 @@ export default function Home() {
                 color={'#f5f5f5'}
                 refresh
             />
+            <Toaster />
         </main>
     )
 }
