@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeClosed } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,7 +16,6 @@ import axios from 'axios'
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from 'next/navigation';
 import { Toaster } from "@/components/ui/toaster"
-
 
 const schema = z.object({
     email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
@@ -30,8 +29,9 @@ type FormData = {
 
 export default function Home() {
     const [show, setShow] = useState(false)
-    const { resolvedTheme } = useTheme();
-    const [color, setColor] = useState("#ffffff");
+    const { resolvedTheme } = useTheme()
+    const [color, setColor] = useState("#ffffff")
+    const passwordRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         setColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
@@ -51,9 +51,9 @@ export default function Home() {
     }, [])
 
     // async login
-    // async login
     const [error, setError] = useState<boolean>(false)
     async function loginUser(data: FormData) {
+
         try {
             const res = await axios.post("http://localhost:3001/login", {
                 email: data.email,
@@ -61,25 +61,41 @@ export default function Home() {
             });
 
             if (res.status === 200) {
-                const usuario = res.data.usuario; // agora os dados do usuário virão corretamente
+                const usuario = res.data.usuario
                 console.log(usuario);
 
                 toast({
                     title: "Login realizado!",
                     description: "Você será redirecionado em 2 segundos.",
-                    className: 'bg-green-400 border-none',
+                    className: 'bg-green-500 border-none rounded-[6px]',
                     duration: 2000,
-                });
+                })
 
                 setTimeout(() => {
                     router.push("/note");
-                }, 1900);
+                }, 2000)
             }
-        } catch (error: any) {
-
+        }
+        catch (error: any) {
+            if (error.response?.status === 401) {
+                toast({
+                    title: "Invalid credentials!",
+                    description: "Please check your password.",
+                    className: 'bg-red-500 border-none rounded-[6px]',
+                    duration: 5000,
+                })
+            }
+            else if (error.response?.status === 404) {
+                toast({
+                    title: "User not found!",
+                    description: "Please check your email or sign up for an account.",
+                    className: 'bg-red-500 border-none rounded-[6px]',
+                    duration: 5000,
+                })
+            }
         }
     }
-    const router = useRouter(); // hook para redirecionamento
+    const router = useRouter()
 
     const onSubmit = async (data: FormData) => {
         await loginUser(data);
@@ -111,7 +127,7 @@ export default function Home() {
                             <div className="flex-col">
                                 <div className="flex gap-2">
                                     <Input
-                                        className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
+                                        className="text-muted-foreground w-full rounded-[6px] bg-transparent text-sm border p-2 font-[family-name:var(--font-geist-mono)]"
                                         placeholder="Your secret key"
                                         type={show ? "text" : "password"}
                                         {...register("password")}

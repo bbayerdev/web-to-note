@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import Link from "next/link"
 
 
 // Menu items.
@@ -121,7 +122,9 @@ export function AppSidebar() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="rounded-[6px]">Cancel</AlertDialogCancel>
-              <AlertDialogAction className="rounded-[6px] hover:bg-red-500">Continue</AlertDialogAction>
+              <AlertDialogAction className="rounded-[6px] hover:bg-red-500">
+                <Link href={'/login'}>Continue</Link>
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
