@@ -1,74 +1,16 @@
-'use client'
-// src/components/CustomForm.tsx
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye } from "lucide-react";
+import Link from "next/link";
 
-// Definindo o esquema de validação com Zod
-const schema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  email: z.string().email({ message: "Please enter a valid email" }),
-  age: z.number().min(18, { message: "You must be at least 18 years old" }),
-});
-
-// Criando o tipo a partir do esquema
-type FormData = z.infer<typeof schema>;
-
-const CustomForm = () => {
-  // Inicializando o React Hook Form com o resolutor Zod
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-  // Função para lidar com o envio do formulário
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-  };
-
+export default function page() {
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label htmlFor="name" className="block">Name</label>
-        <input
-          id="name"
-          type="text"
-          {...register("name")}
-          className="input"
-        />
-        {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+    <main>
+      <h1>root page</h1>
+
+      <div className="flex flex-col underline ml-2">
+        <Link href={'/login'}> login</Link>
+        <Link href={'/signUp'}> signUp</Link>
       </div>
 
-      <div>
-        <label htmlFor="email" className="block">Email</label>
-        <input
-          id="email"
-          type="email"
-          {...register("email")}
-          className="input"
-        />
-        {errors.email && <span className="text-red-500">{errors.email.message}</span>}
-      </div>
+    </main>
+  )
 
-      <div>
-        <label htmlFor="age" className="block">Age</label>
-        <input
-          id="age"
-          type="password"
-          {...register("age", { valueAsNumber: true })}
-          className="input"
-        />
-        {errors.age && <span className="text-red-500">{errors.age.message}</span>}
-        <button><Eye/></button>
-      </div>
-
-      <button type="submit" className="btn">Submit</button>
-    </form>
-  );
-};
-
-export default CustomForm;
+}

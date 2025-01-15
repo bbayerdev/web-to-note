@@ -103,7 +103,7 @@ export default function Home() {
 
     return (
         <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
-            <Card className="bg-neutral-900 rounded-xl w-auto h-auto relative p-1 z-10 shadow-2xl">
+            <Card className="bg-neutral-900 rounded-[20px] w-auto h-auto relative z-10 shadow-2xl">
                 <CardHeader>
                     <div>
                         <CardTitle>Hi there, Welcome back!</CardTitle>
