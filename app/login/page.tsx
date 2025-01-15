@@ -62,12 +62,14 @@ export default function Home() {
 
             if (res.status === 200) {
                 const usuario = res.data.usuario
+                //salva o usuário no localStorage
+                localStorage.setItem("usuario", JSON.stringify(usuario))
                 console.log(usuario);
 
                 toast({
                     title: "Login realizado!",
-                    description: "Você será redirecionado em 2 segundos.",
-                    className: 'bg-green-500 border-none rounded-[6px]',
+                    description: "Você será redirecionado em 2 segundos",
+                    className: 'bg-green-500 border-none rounded-[20px]',
                     duration: 2000,
                 })
 
@@ -80,16 +82,16 @@ export default function Home() {
             if (error.response?.status === 401) {
                 toast({
                     title: "Invalid credentials!",
-                    description: "Please check your password.",
-                    className: 'bg-red-500 border-none rounded-[6px]',
+                    description: "Please check your password",
+                    className: 'bg-red-500 border-none rounded-[20px]',
                     duration: 5000,
                 })
             }
             else if (error.response?.status === 404) {
                 toast({
                     title: "User not found!",
-                    description: "Please check your email or sign up for an account.",
-                    className: 'bg-red-500 border-none rounded-[6px]',
+                    description: "Please check your email or sign up for an account",
+                    className: 'bg-red-500 border-none rounded-[20px]',
                     duration: 5000,
                 })
             }

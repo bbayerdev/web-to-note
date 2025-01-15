@@ -24,7 +24,6 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 
-
 const schema = z
     .object({
         email: z
@@ -77,7 +76,7 @@ export default function Home() {
 
     const onSubmit = (data: FormData) => {
         console.log(data);
-    };
+    }
 
     return (
         <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
@@ -160,7 +159,6 @@ export default function Home() {
                             </div>
                         </div>
 
-
                         <div>
                             <Label>Confirm password</Label>
                             <div className="flex-col">
@@ -180,9 +178,8 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <div className="flex gap-2">
-                            <Button type="submit" className="w-full rounded-[6px] mt-2">    <UserPen /> Sign up</Button>
-
+                        <div className="flex gap-2 items-center">
+                            <Button type="submit" className="w-full rounded-[6px] mt-2"> <UserPen /> Sign up </Button>
                             <Button type="submit" variant={'secondary'} className="w-full rounded-[6px] mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -190,7 +187,7 @@ export default function Home() {
                                         fill="currentColor"
                                     />
                                 </svg>
-                                SignUp with Google
+                                Sign up with Google
                             </Button>
                         </div>
                     </form>

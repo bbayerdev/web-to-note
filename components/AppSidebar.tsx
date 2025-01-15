@@ -112,7 +112,7 @@ export function AppSidebar() {
           <AlertDialogTrigger asChild >
             <Button variant={'ghost'} size={'icon'} className="rounded-[6px] hover:bg-red-500/10"> <LogOut color="#ef4444" /> </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="font-[family-name:var(--font-geist-sans)]" >
+          <AlertDialogContent className="font-[family-name:var(--font-geist-sans)] rounded-[20px]" >
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
               <AlertDialogDescription>
