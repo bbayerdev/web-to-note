@@ -26,6 +26,8 @@ import {
 import axios from "axios"
 import { toast } from "@/hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
+import router from "next/router"
+import { useRouter } from "next/navigation"
 
 const schema = z
     .object({
@@ -90,28 +92,23 @@ export default function Home() {
 
             if (res.status === 201) {
                 toast({
-                    title: "Suscess!",
-                    description: "Você será redirecionado em 2 segundos",
+                    title: "Login Successful!",
+                    description: "You will be redirected in 2 seconds",
                     className: 'bg-green-500 border-none rounded-[20px]',
                     duration: 2000,
                 })
             }
-            setLoading(false)
+
+            setTimeout(() => {
+                router.push("/signUp/congratulations");
+            }, 2000)
+
         }
         catch (error: any) {
             if (error.response?.status === 400) {
                 toast({
-                    title: "Email ja em uso!",
+                    title: "Email Already in Use",
                     description: "Please check your password",
-                    className: 'bg-red-500 border-none rounded-[20px]',
-                    duration: 5000,
-                })
-                setLoading(false)
-            }
-            else if (error.response?.status === 404) {
-                toast({
-                    title: "User not found!",
-                    description: "Please check your email or sign up for an account",
                     className: 'bg-red-500 border-none rounded-[20px]',
                     duration: 5000,
                 })
@@ -119,6 +116,7 @@ export default function Home() {
             }
         }
     }
+    const router = useRouter()
 
     const onSubmit = async (data: FormData) => {
         await signUp(data)
