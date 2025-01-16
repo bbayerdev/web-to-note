@@ -23,6 +23,9 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import axios from "axios"
+import { toast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 const schema = z
     .object({
@@ -47,7 +50,6 @@ const schema = z
         message: 'Passwords mismatch',
         path: ['confirmPass'], // Aponta o erro para o campo `confirmPass`
     });
-
 
 type FormData = {
     email: string
@@ -74,8 +76,48 @@ export default function Home() {
         resolver: zodResolver(schema),
     })
 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
+    // async login
+    const [error, setError] = useState<boolean>(false)
+    async function signUp(data: FormData) {
+
+        try {
+            const res = await axios.post("http://localhost:3001/usuario", {
+                nome: data.name,
+                email: data.email,
+                senha: data.confirmPass
+            })
+
+            if (res.status === 200) {
+                toast({
+                    title: "Suscess!",
+                    description: "Você será redirecionado em 2 segundos",
+                    className: 'bg-green-500 border-none rounded-[20px]',
+                    duration: 2000,
+                })
+            }
+        }
+        catch (error: any) {
+            if (error.response?.status === 400) {
+                toast({
+                    title: "Email ja em uso!",
+                    description: "Please check your password",
+                    className: 'bg-red-500 border-none rounded-[20px]',
+                    duration: 5000,
+                })
+            }
+            else if (error.response?.status === 404) {
+                toast({
+                    title: "User not found!",
+                    description: "Please check your email or sign up for an account",
+                    className: 'bg-red-500 border-none rounded-[20px]',
+                    duration: 5000,
+                })
+            }
+        }
+    }
+
+    const onSubmit = async (data: FormData) => {
+        await signUp(data)
     }
 
     return (
@@ -126,11 +168,11 @@ export default function Home() {
                             {errors.name && <p className="text-xs ml-1 mt-1 text-red-500">{errors.name.message}</p>}
                         </div>
 
-                        <div className="">
+                        <div>
                             <div className="flex items-center gap-2 pb-1">
                                 <Label>Password</Label>
                                 <HoverCard>
-                                    <HoverCardTrigger>
+                                    <HoverCardTrigger className="cursor-pointer">
                                         <Info strokeWidth={'2'} className="size-3" />
                                     </HoverCardTrigger>
                                     <HoverCardContent className="rounded-[6px] text-sm">
@@ -180,6 +222,7 @@ export default function Home() {
 
                         <div className="flex gap-2 items-center">
                             <Button type="submit" className="w-full rounded-[6px] mt-2"> <UserPen /> Sign up </Button>
+                        
                             <Button type="submit" variant={'secondary'} className="w-full rounded-[6px] mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -205,6 +248,7 @@ export default function Home() {
                 color={'#f5f5f5'}
                 refresh
             />
+            <Toaster />
         </main>
     )
 }
