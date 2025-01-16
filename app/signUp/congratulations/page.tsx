@@ -9,14 +9,29 @@ export default function page() {
 
     useEffect(() => {
         setColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
-    }, [resolvedTheme]);
+    }, [resolvedTheme])
+
+    const [nome, setNome] = useState(""); // Estado para armazenar apenas o nome
+
+    useEffect(() => {
+        const dataUser = localStorage.getItem("usuario"); // Recupera o JSON do localStorage
+        if (dataUser) {
+            const { nome } = JSON.parse(dataUser); // Desestrutura o nome do objeto
+            setNome(nome); // Atualiza o estado com o nome
+        }
+    }, [])
 
     return (
         <main className="flex h-screen justify-center items-center">
             <h1>
-                "Congratulations, [User's Name]!" <br />
+                Congratulations, {nome}! <br />
                 Welcome to [Your Platform Name]
             </h1>
+
+            <p>
+
+            </p>
+
             <Particles
                 className="absolute inset-0 z-0"
                 quantity={100}
