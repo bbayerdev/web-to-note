@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeClosed, Info, UserPen } from "lucide-react"
+import { Eye, EyeClosed, Info, Loader, UserPen } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
@@ -78,8 +78,9 @@ export default function Home() {
 
     // async login
     const [error, setError] = useState<boolean>(false)
+    const [loading, setLoading] = useState(false)
     async function signUp(data: FormData) {
-
+        setLoading(true)
         try {
             const res = await axios.post("http://localhost:3001/usuario", {
                 nome: data.name,
@@ -87,7 +88,7 @@ export default function Home() {
                 senha: data.confirmPass
             })
 
-            if (res.status === 200) {
+            if (res.status === 201) {
                 toast({
                     title: "Suscess!",
                     description: "Você será redirecionado em 2 segundos",
@@ -95,6 +96,7 @@ export default function Home() {
                     duration: 2000,
                 })
             }
+            setLoading(false)
         }
         catch (error: any) {
             if (error.response?.status === 400) {
@@ -104,6 +106,7 @@ export default function Home() {
                     className: 'bg-red-500 border-none rounded-[20px]',
                     duration: 5000,
                 })
+                setLoading(false)
             }
             else if (error.response?.status === 404) {
                 toast({
@@ -112,6 +115,7 @@ export default function Home() {
                     className: 'bg-red-500 border-none rounded-[20px]',
                     duration: 5000,
                 })
+                setLoading(false)
             }
         }
     }
@@ -127,6 +131,7 @@ export default function Home() {
                     <div className="flex flex-col">
                         <div className="flex justify-between">
                             <CardTitle className="text-3xl">Hello!</CardTitle>
+
                             <TooltipProvider>
                                 <Link href={'/'}>
                                     <Tooltip>
@@ -221,8 +226,16 @@ export default function Home() {
                         </div>
 
                         <div className="flex gap-2 items-center">
-                            <Button type="submit" className="w-full rounded-[6px] mt-2"> <UserPen /> Sign up </Button>
-                        
+
+                            {loading ? (
+                                <Button className="w-full rounded-[6px] mt-2" disabled>
+                                    <Loader className="animate-spin" />
+                                    Please wait
+                                </Button>
+                            ) : (
+                                <Button type="submit" className="w-full rounded-[6px] mt-2"> <UserPen /> Sign up </Button>
+                            )}
+
                             <Button type="submit" variant={'secondary'} className="w-full rounded-[6px] mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
