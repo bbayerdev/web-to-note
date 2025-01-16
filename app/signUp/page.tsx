@@ -26,7 +26,6 @@ import {
 import axios from "axios"
 import { toast } from "@/hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
-import router from "next/router"
 import { useRouter } from "next/navigation"
 
 const schema = z
@@ -83,7 +82,6 @@ export default function Home() {
     })
 
     // async login
-    const [error, setError] = useState<boolean>(false)
     const [loading, setLoading] = useState(false)
     async function signUp(data: FormData) {
         setLoading(true)
@@ -105,6 +103,10 @@ export default function Home() {
                     className: 'bg-green-500 border-none rounded-[20px]',
                     duration: 2000,
                 })
+
+                setTimeout(() => {
+                    router.push("/signUp/congratulations");
+                }, 2000)
             }
 
         }
