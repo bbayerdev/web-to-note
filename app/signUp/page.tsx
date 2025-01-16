@@ -70,6 +70,10 @@ export default function Home() {
         setColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
     }, [resolvedTheme]);
 
+    useEffect(() => {
+        localStorage.clear()
+    }, [])
+
     const {
         register,
         handleSubmit,
@@ -91,6 +95,10 @@ export default function Home() {
             })
 
             if (res.status === 201) {
+                const usuario = res.data
+                //salva o usuário no localStorage
+                localStorage.setItem("usuario", JSON.stringify(usuario))
+                console.log(usuario)
                 toast({
                     title: "Login Successful!",
                     description: "You will be redirected in 2 seconds",
@@ -98,10 +106,6 @@ export default function Home() {
                     duration: 2000,
                 })
             }
-
-            setTimeout(() => {
-                router.push("/signUp/congratulations");
-            }, 2000)
 
         }
         catch (error: any) {
