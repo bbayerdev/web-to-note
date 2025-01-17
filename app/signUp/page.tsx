@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/tooltip"
 import { BorderBeam } from "@/components/ui/border-beam"
 import { useTheme } from "next-themes";
-import Particles from "@/components/ui/particles"
 import {
     HoverCard,
     HoverCardContent,
