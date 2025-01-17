@@ -1,11 +1,14 @@
 'use client'
 import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
 import { Button } from "@/components/ui/button";
+import Confetti, { ConfettiRef } from "@/components/ui/confetti";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { cn } from "@/lib/utils";
 import { Rocket } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRef } from "react";
 
 export default function page() {
     const { resolvedTheme } = useTheme();
@@ -26,10 +29,12 @@ export default function page() {
         }
     }, [])
 
+    const confettiRef = useRef<ConfettiRef>(null);
+
     return (
         <main className="flex h-screen flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
             <section className="space-y-4 z-10">
-                <h1 className="text-3xl font-bold"> Welcome to To-Note <span className="italic ">{nome}</span> ! <br />
+                <h1 className="text-3xl font-bold"> Welcome to To-Note <span className="italic">{nome}</span> ! <br />
                 </h1>
                 <p className="font-[family-name:var(--font-geist-mono)]"> Your journey to organizing your ideas and notes starts now. </p>
 
@@ -42,8 +47,17 @@ export default function page() {
 
                 <h1 className="font-bold">Get started now!</h1>
 
-                <InteractiveHoverButton className="rounded-[6px]">Go to My Dashboard  </InteractiveHoverButton>
+                <InteractiveHoverButton className="rounded-[6px]"> <Link href={'/note'}> Go to My Dashboard </Link>   </InteractiveHoverButton>
+
             </section>
+            <Confetti
+                ref={confettiRef}
+                className="absolute left-0 top-0 z-0 size-full"
+                onMouseEnter={() => {
+                    confettiRef.current?.fire({});
+                }}
+            />
+
             <AnimatedGridPattern
                 numSquares={60}
                 maxOpacity={0.2}
