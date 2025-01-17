@@ -27,6 +27,8 @@ import axios from "axios"
 import { toast } from "@/hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { useRouter } from "next/navigation"
+import AnimatedGridPattern from "@/components/ui/animated-grid-pattern"
+import { cn } from "@/lib/utils"
 
 const schema = z
     .object({
@@ -258,12 +260,15 @@ export default function Home() {
                 </CardFooter>
                 <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
             </Card>
-            <Particles
-                className="absolute inset-0 z-0"
-                quantity={100}
-                ease={80}
-                color={'#f5f5f5'}
-                refresh
+            <AnimatedGridPattern
+                numSquares={60}
+                maxOpacity={0.2}
+                duration={2}
+                repeatDelay={0.5}
+                className={cn(
+                    "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+                    "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+                )}
             />
             <Toaster />
         </main>

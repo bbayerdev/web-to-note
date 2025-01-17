@@ -11,11 +11,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { BorderBeam } from "@/components/ui/border-beam"
 import { useTheme } from "next-themes";
-import Particles from "@/components/ui/particles"
 import axios from 'axios'
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from 'next/navigation';
 import { Toaster } from "@/components/ui/toaster"
+import { cn } from "@/lib/utils"
+import AnimatedGridPattern from "@/components/ui/animated-grid-pattern"
 
 const schema = z.object({
     email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
@@ -169,12 +170,15 @@ export default function Home() {
                 </CardFooter>
                 <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
             </Card>
-            <Particles
-                className="absolute inset-0 z-0"
-                quantity={100}
-                ease={80}
-                color={'#f5f5f5'}
-                refresh
+            <AnimatedGridPattern
+                numSquares={60}
+                maxOpacity={0.2}
+                duration={2}
+                repeatDelay={0.5}
+                className={cn(
+                    "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+                    "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+                )}
             />
             <Toaster />
         </main>
