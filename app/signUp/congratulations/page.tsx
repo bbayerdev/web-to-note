@@ -1,5 +1,8 @@
 'use client'
+import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
 import { Button } from "@/components/ui/button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { cn } from "@/lib/utils";
 import { Rocket } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -25,12 +28,12 @@ export default function page() {
 
     return (
         <main className="flex h-screen flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
-            <section className="space-y-4">
-                <h1 className="text-2xl font-bold"> Welcome to To-Note <span className="italic">{nome}</span> ! <br />
+            <section className="space-y-4 z-10">
+                <h1 className="text-3xl font-bold"> Welcome to To-Note <span className="italic ">{nome}</span> ! <br />
                 </h1>
                 <p className="font-[family-name:var(--font-geist-mono)]"> Your journey to organizing your ideas and notes starts now. </p>
 
-                <h1 className="text-xl font-bold"> What can you do with To-Note? </h1>
+                <h1 className="text-2xl font-bold"> What can you do with To-Note? </h1>
                 <div className="flex flex-col ml-8 m-4 font-[family-name:var(--font-geist-mono)]">
                     <li>Create, edit, and organize your notes effortlessly.</li>
                     <li> Sync your ideas across all your devices.</li>
@@ -39,8 +42,18 @@ export default function page() {
 
                 <h1 className="font-bold">Get started now!</h1>
 
-                <Button variant={"secondary"} className="rounded-[6px]">Go to My Dashboard <Rocket /> </Button>
+                <InteractiveHoverButton className="rounded-[6px]">Go to My Dashboard  </InteractiveHoverButton>
             </section>
+            <AnimatedGridPattern
+                numSquares={60}
+                maxOpacity={0.2}
+                duration={2}
+                repeatDelay={0.5}
+                className={cn(
+                    "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+                    "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+                )}
+            />
         </main>
     )
 }
