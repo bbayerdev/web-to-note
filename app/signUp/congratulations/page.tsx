@@ -47,7 +47,10 @@ export default function page() {
 
                 <h1 className="font-bold">Get started now!</h1>
 
-                <InteractiveHoverButton className="rounded-[6px]"> <Link href={'/note'}> Go to My Dashboard </Link>   </InteractiveHoverButton>
+                <div>
+                    <Link href={'/note'} className="mt-4">  <InteractiveHoverButton className="rounded-[6px]"> Go to My Dashboard </InteractiveHoverButton> </Link>
+
+                </div>
 
             </section>
             <Confetti
