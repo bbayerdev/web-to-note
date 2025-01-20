@@ -1,10 +1,9 @@
 'use client'
 import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
-import { Button } from "@/components/ui/button";
 import Confetti, { ConfettiRef } from "@/components/ui/confetti";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Rocket } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,14 +18,20 @@ export default function page() {
     }, [resolvedTheme])
 
     const [nome, setNome] = useState("")
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const dataUser = localStorage.getItem("usuario")
-        if (dataUser) {
-            const { nome } = JSON.parse(dataUser)
-            const primeiroNome = nome.split(" ")[0]
-            setNome(primeiroNome)
-        }
+        setLoading(true);
+        const timeout = setTimeout(() => {
+            const dataUser = localStorage.getItem("usuario");
+            if (dataUser) {
+                const { nome } = JSON.parse(dataUser);
+                const primeiroNome = nome.split(" ")[0];
+                setNome(primeiroNome);
+            }
+            setLoading(false);
+        }, 500)
+        return () => clearTimeout(timeout)
     }, [])
 
     const confettiRef = useRef<ConfettiRef>(null);
@@ -34,7 +39,20 @@ export default function page() {
     return (
         <main className="flex h-screen flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
             <section className="space-y-4 z-10">
-                <h1 className="text-3xl font-bold"> Welcome to To-Note <span className="italic">{nome}</span> ! <br />
+
+                <h1 className="text-3xl font-bold"> Welcome to To-Note
+                    {loading ? (
+                        <>
+                       
+                        </>
+                    ) : (
+                        <>
+                            <span className="ml-2">
+                                {nome}
+                            </span> !
+                        </>
+                    )}
+                    <br />
                 </h1>
                 <p className="font-[family-name:var(--font-geist-mono)]"> Your journey to organizing your ideas and notes starts now. </p>
 
@@ -71,6 +89,6 @@ export default function page() {
                     "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
                 )}
             />
-        </main>
+        </main >
     )
 }
