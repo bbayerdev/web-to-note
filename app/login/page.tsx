@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeClosed } from "lucide-react"
+import { Eye, EyeClosed, Loader, UserPen } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form";
@@ -54,8 +54,9 @@ export default function Home() {
 
     // async login
     const [error, setError] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     async function loginUser(data: FormData) {
-
+        setLoading(true)
         try {
             const res = await axios.post("http://localhost:3001/login", {
                 email: data.email,
@@ -69,15 +70,15 @@ export default function Home() {
                 console.log(usuario);
 
                 toast({
-                    title: "Login realizado!",
-                    description: "Você será redirecionado em 2 segundos",
+                    title: "You're logged in!",
+                    description: "You will be redirected shortly",
                     className: 'bg-green-500 border-none rounded-[20px]',
                     duration: 2000,
                 })
 
                 setTimeout(() => {
                     router.push("/note");
-                }, 2000)
+                }, 1000)
             }
         }
         catch (error: any) {
@@ -97,6 +98,7 @@ export default function Home() {
                     duration: 5000,
                 })
             }
+            setLoading(false)
         }
     }
     const router = useRouter()
@@ -148,9 +150,20 @@ export default function Home() {
                                 <Link href='#' className="text-xs mt-1 text-muted-foreground hover:underline hover:text-white">Forgot your password?</Link>
                             </div>
                         </div>
-                         
+
                         <div>
-                            <Button type="submit" className="w-full rounded-[6px] mt-2">Login</Button>
+                            <div className="flex gap-2 items-center">
+
+                                {loading ? (
+                                    <Button className="w-full rounded-[6px] mt-4" disabled>
+                                        <Loader className="animate-spin" />
+                                        Please wait
+                                    </Button>
+                                ) : (
+                                    <Button type="submit" className="w-full rounded-[6px] mt-4"> Login</Button>
+                                )}
+
+                            </div>
                         </div>
                         <div className="justify-center items-center gap-2 flex w-full">
                             <Separator orientation="horizontal" className="w-20" />
