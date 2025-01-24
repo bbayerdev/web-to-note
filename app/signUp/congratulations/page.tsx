@@ -18,21 +18,19 @@ export default function page() {
     }, [resolvedTheme])
 
     const [nome, setNome] = useState("")
-    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        setLoading(true);
-        const timeout = setTimeout(() => {
-            const dataUser = localStorage.getItem("usuario");
-            if (dataUser) {
-                const { nome } = JSON.parse(dataUser);
-                const primeiroNome = nome.split(" ")[0];
-                setNome(primeiroNome);
-            }
-            setLoading(false);
-        }, 500)
-        return () => clearTimeout(timeout)
+        const dataUser = localStorage.getItem("usuario");
+        if (dataUser) {
+            // Fazendo o parsing correto do JSON
+            const parsedData = JSON.parse(dataUser);
+            // Pegando apenas o nome
+            const nome = parsedData.nome;
+            setNome(nome); // Atualizando o estado com o nome
+        }
     }, [])
+
+    console.log(nome)
 
     const confettiRef = useRef<ConfettiRef>(null);
 
@@ -41,18 +39,9 @@ export default function page() {
             <section className="space-y-4 z-10">
 
                 <h1 className="text-3xl font-bold"> Welcome to To-Note
-                    {loading ? (
-                        <>
-                       
-                        </>
-                    ) : (
-                        <>
-                            <span className="ml-2">
-                                {nome}
-                            </span> !
-                        </>
-                    )}
-                    <br />
+                    <span className="ml-2">
+                        {nome}
+                    </span> !
                 </h1>
                 <p className="font-[family-name:var(--font-geist-mono)]"> Your journey to organizing your ideas and notes starts now. </p>
 

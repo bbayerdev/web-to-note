@@ -5,6 +5,7 @@ import React from 'react'
 
 const GoogleLoginButton = () => {
 
+
     const { data: session } = useSession()
 
     const handleGoogleLogin = async () => {
@@ -28,14 +29,26 @@ const GoogleLoginButton = () => {
                     name
                 });
 
-                console.log('Usuário autenticado:', response.data);
-                // Redireciona para o dashboard após a autenticação
-                window.location.href = '/note';
+                console.log('Usuário autenticado:', response.data)
+
+                const usuario = response.data
+                //salva o usuário no localStorage
+                localStorage.setItem("usuario", JSON.stringify(usuario))
+
+                // Verifica se o usuário é novo
+                if (response.data.authType === 'google') {
+                    // Redireciona para a página de congratulações caso seja o primeiro login
+                    window.location.href = '/signUp/congratulations';
+                } else {
+                    // Caso contrário, redireciona para a página principal de notas
+                    window.location.href = '/note';
+                }
             }
         } catch (error) {
             console.error('Erro no login com Google:', error);
         }
     }
+
 
     return (
         <Button variant={'secondary'} className="w-full rounded-[6px]" onClick={handleGoogleLogin}>

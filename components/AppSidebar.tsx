@@ -27,6 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import Link from "next/link"
+import { signOut } from "next-auth/react"
 
 
 // Menu items.
@@ -58,6 +59,12 @@ const items = [
   },
 
 ]
+
+const handleLogout = async () => {
+  await signOut({ redirect: false }) // Não redireciona automaticamente
+  // Após o logout, redireciona o usuário para a página de login
+  window.location.href = '/login'
+}
 
 export function AppSidebar() {
   return (
@@ -110,7 +117,13 @@ export function AppSidebar() {
       <SidebarFooter className="bg-neutral-900 flex items-end justify-end">
         <AlertDialog>
           <AlertDialogTrigger asChild >
-            <Button variant={'ghost'} size={'icon'} className="rounded-[6px] hover:bg-red-500/10"> <LogOut color="#ef4444" /> </Button>
+            <Button
+              variant={'ghost'}
+              size={'icon'}
+              className="rounded-[6px] hover:bg-red-500/10"
+            >
+              <LogOut color="#ef4444" />
+            </Button>
           </AlertDialogTrigger>
           <AlertDialogContent className="font-[family-name:var(--font-geist-sans)] rounded-[20px]" >
             <AlertDialogHeader>
@@ -122,8 +135,8 @@ export function AppSidebar() {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="rounded-[6px]">Cancel</AlertDialogCancel>
-              <AlertDialogAction className="rounded-[6px] hover:bg-red-500">
-                <Link href={'/login'}>Continue</Link>
+              <AlertDialogAction onClick={handleLogout} className="rounded-[6px] hover:bg-red-500">
+                Continue
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
