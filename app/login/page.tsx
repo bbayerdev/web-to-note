@@ -163,14 +163,14 @@ export default function Home() {
                                             Please wait
                                         </Button>
                                     ) : (
-                                        <Button type="submit" className="w-full rounded-[6px] mt-4"> Login</Button>
+                                        <Button type="submit" className="w-full rounded-[6px] mt-4">Login</Button>
                                     )}
 
                                 </div>
                             </div>
                             <div className="justify-center items-center gap-2 flex w-full">
                                 <Separator orientation="horizontal" className="w-20" />
-                                <p className="text-xs text-muted-foreground">Or log in with</p>
+                                <p className="text-xs text-muted-foreground">Or enter with</p>
                                 <Separator orientation="horizontal" className="w-20" />
                             </div>
                         </form>

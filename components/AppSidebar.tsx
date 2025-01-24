@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import { signOut } from "next-auth/react"
+import { useEffect, useState } from "react"
 
 
 // Menu items.
@@ -66,13 +67,29 @@ const handleLogout = async () => {
   window.location.href = '/login'
 }
 
+
 export function AppSidebar() {
+
+  const [nome, setNome] = useState(null)
+
+    useEffect(() => {
+        const dataUser = localStorage.getItem("usuario");
+        if (dataUser) {
+            // Fazendo o parsing correto do JSON
+            const parsedData = JSON.parse(dataUser);
+            // Pegando apenas o nome
+            const nome = parsedData.nome;
+            setNome(nome); // Atualizando o estado com o nome
+        }
+    }, [])
+
+
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
       <SidebarContent className="bg-neutral-900">
         <SidebarGroup className="mt-2">
           <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold">
-            <NotebookPen /> <span className="text-neutral-200">Yuri's</span> Notes
+            <NotebookPen /> <span className="text-neutral-200">{nome}'s</span> Notes
           </SidebarGroupLabel>
 
           <SidebarMenuButton className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>

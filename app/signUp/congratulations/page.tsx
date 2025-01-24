@@ -2,7 +2,6 @@
 import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
 import Confetti, { ConfettiRef } from "@/components/ui/confetti";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -10,6 +9,14 @@ import { useEffect, useState } from "react";
 import { useRef } from "react";
 
 export default function page() {
+    useEffect(() => {
+        const teste_logado = localStorage.getItem('usuario')
+    
+        if (!teste_logado) {
+          window.location.href = '/login'
+        }
+      }, [])
+
     const { resolvedTheme } = useTheme();
     const [color, setColor] = useState("#ffffff");
 
