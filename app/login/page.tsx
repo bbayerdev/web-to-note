@@ -18,6 +18,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { cn } from "@/lib/utils"
 import AnimatedGridPattern from "@/components/ui/animated-grid-pattern"
 import { Separator } from "@/components/ui/separator"
+import GoogleLoginButton from "./GoogleLoginButton"
+import { SessionProvider } from "next-auth/react"
 
 const schema = z.object({
     email: z.string().email('Please enter a valid email address').nonempty('Please enter a valid email address'),
@@ -108,98 +110,93 @@ export default function Home() {
     }
 
     return (
-        <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
-            <Card className="bg-neutral-900 rounded-[20px] w-auto h-auto relative z-10 shadow-2xl">
-                <CardHeader>
-                    <div>
-                        <CardTitle>Hi there, Welcome back!</CardTitle>
-                        <CardDescription className="font-[family-name:var(--font-geist-mono)]">Enter your email and password</CardDescription>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+        <SessionProvider>
+            <main className="flex justify-center items-center h-screen font-[family-name:var(--font-geist-sans)] overflow-hidden">
+                <Card className="bg-neutral-900 rounded-[20px] w-auto h-auto relative z-10 shadow-2xl">
+                    <CardHeader>
                         <div>
-                            <Label>Email</Label>
-                            <Input
-                                className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
-                                placeholder="Your email goes here"
-                                {...register("email")}
-                            />
-
-                            {errors.email && <p className="text-xs ml-1 mt-1 text-red-500">{errors.email.message}</p>}
+                            <CardTitle>Hi there, Welcome back!</CardTitle>
+                            <CardDescription className="font-[family-name:var(--font-geist-mono)]">Enter your email and password</CardDescription>
                         </div>
-                        <div>
-                            <Label>Password</Label>
-                            <div className="flex-col">
-                                <div className="flex gap-2">
-                                    <Input
-                                        className="text-muted-foreground w-full rounded-[6px] bg-transparent text-sm border p-2 font-[family-name:var(--font-geist-mono)]"
-                                        placeholder="Your secret key"
-                                        type={show ? "text" : "password"}
-                                        {...register("password")}
-                                    />
+                    </CardHeader>
+                    <CardContent>
+                        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+                            <div>
+                                <Label>Email</Label>
+                                <Input
+                                    className="text-muted-foreground w-full rounded-[6px] bg-transparent border text-sm p-2 font-[family-name:var(--font-geist-mono)]"
+                                    placeholder="Your email goes here"
+                                    {...register("email")}
+                                />
 
-                                    <Button type="button" onClick={() => setShow(!show)} variant={'secondary'} className="rounded-[6px]">
-                                        {show ? <Eye /> : <EyeClosed />}
-                                    </Button>
+                                {errors.email && <p className="text-xs ml-1 mt-1 text-red-500">{errors.email.message}</p>}
+                            </div>
+                            <div>
+                                <Label>Password</Label>
+                                <div className="flex-col">
+                                    <div className="flex gap-2">
+                                        <Input
+                                            className="text-muted-foreground w-full rounded-[6px] bg-transparent text-sm border p-2 font-[family-name:var(--font-geist-mono)]"
+                                            placeholder="Your secret key"
+                                            type={show ? "text" : "password"}
+                                            {...register("password")}
+                                        />
+
+                                        <Button type="button" onClick={() => setShow(!show)} variant={'secondary'} className="rounded-[6px]">
+                                            {show ? <Eye /> : <EyeClosed />}
+                                        </Button>
+                                    </div>
+                                    {errors.password && <p className="text-xs ml-1 mt-1 text-red-500">{errors.password.message}</p>}
                                 </div>
-                                {errors.password && <p className="text-xs ml-1 mt-1 text-red-500">{errors.password.message}</p>}
+
+                                <div className="flex justify-end">
+                                    <Link href='#' className="text-xs mt-1 text-muted-foreground hover:underline hover:text-white">Forgot your password?</Link>
+                                </div>
                             </div>
 
-                            <div className="flex justify-end">
-                                <Link href='#' className="text-xs mt-1 text-muted-foreground hover:underline hover:text-white">Forgot your password?</Link>
+                            <div>
+                                <div className="flex gap-2 items-center">
+
+                                    {loading ? (
+                                        <Button className="w-full rounded-[6px] mt-4" disabled>
+                                            <Loader className="animate-spin" />
+                                            Please wait
+                                        </Button>
+                                    ) : (
+                                        <Button type="submit" className="w-full rounded-[6px] mt-4"> Login</Button>
+                                    )}
+
+                                </div>
                             </div>
-                        </div>
-
-                        <div>
-                            <div className="flex gap-2 items-center">
-
-                                {loading ? (
-                                    <Button className="w-full rounded-[6px] mt-4" disabled>
-                                        <Loader className="animate-spin" />
-                                        Please wait
-                                    </Button>
-                                ) : (
-                                    <Button type="submit" className="w-full rounded-[6px] mt-4"> Login</Button>
-                                )}
-
+                            <div className="justify-center items-center gap-2 flex w-full">
+                                <Separator orientation="horizontal" className="w-20" />
+                                <p className="text-xs text-muted-foreground">Or log in with</p>
+                                <Separator orientation="horizontal" className="w-20" />
                             </div>
+                        </form>
+                        <div className="mt-2">
+                            <GoogleLoginButton />
                         </div>
-                        <div className="justify-center items-center gap-2 flex w-full">
-                            <Separator orientation="horizontal" className="w-20" />
-                            <p className="text-xs text-muted-foreground">Or log in with</p>
-                            <Separator orientation="horizontal" className="w-20" />
-                        </div>
-                        <div>
-                            <Button type="submit" variant={'secondary'} className="w-full rounded-[6px]">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                                Login with Google
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-                <CardFooter className="text-center flex justify-center text-sm gap-1 text-muted-foreground">
-                    <Label>Need an account?</Label>
-                    <Link className="hover:underline hover:text-white" href={'/signUp'}>Create one now</Link>
-                </CardFooter>
-                <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
-            </Card>
-            <AnimatedGridPattern
-                numSquares={60}
-                maxOpacity={0.2}
-                duration={2}
-                repeatDelay={0.5}
-                className={cn(
-                    "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-                    "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
-                )}
-            />
-            <Toaster />
-        </main>
+
+                    </CardContent>
+                    <CardFooter className="text-center flex justify-center text-sm gap-1 text-muted-foreground">
+                        <Label>Need an account?</Label>
+                        <Link className="hover:underline hover:text-white" href={'/signUp'}>Create one now</Link>
+                    </CardFooter>
+                    <BorderBeam borderWidth={2} colorFrom="#fafafa" colorTo="#737373" />
+                </Card>
+                <AnimatedGridPattern
+                    numSquares={60}
+                    maxOpacity={0.2}
+                    duration={2}
+                    repeatDelay={0.5}
+                    className={cn(
+                        "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+                        "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+                    )}
+                />
+                <Toaster />
+            </main>
+        </SessionProvider>
     )
 }
