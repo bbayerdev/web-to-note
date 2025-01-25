@@ -63,8 +63,7 @@ const items = [
 ]
 
 const handleLogout = async () => {
-  await signOut({ redirect: false }) // Não redireciona automaticamente
-  // Após o logout, redireciona o usuário para a página de login
+  await signOut({ redirect: false })
   window.location.href = '/login'
 }
 
@@ -83,7 +82,7 @@ export function AppSidebar() {
         setNome(nome)
       }
       setLoading(false)
-    }, 800)
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [])

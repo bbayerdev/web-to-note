@@ -8,11 +8,12 @@ const GoogleLoginButton = () => {
 
     const { data: session } = useSession()
     const [loading, setLoading] = useState(false)
+    const imageUrl = session?.user?.image
 
     const handleGoogleLogin = async () => {
         setLoading(true)
         try {
-            const result = await signIn('google', { redirect: false })
+            const result = await signIn('google')
 
             if (result?.error) {
                 console.error('Erro na autenticação com Google:', result.error)
@@ -24,17 +25,19 @@ const GoogleLoginButton = () => {
 
                 const response = await axios.post('http://localhost:3001/auth/google', {
                     email,
-                    name
+                    name,
+                    imageUrl
                 })
 
                 const usuario = response.data
                 localStorage.setItem("usuario", JSON.stringify(usuario))
 
-                if (response.status === 200) {
+                if (response.status === 201) {
                     window.location.href = '/signUp/congratulations'
                 } else {
                     window.location.href = '/note'
                 }
+
             }
         } catch (error) {
             console.error('Erro no login com Google:', error)
@@ -59,7 +62,8 @@ const GoogleLoginButton = () => {
                         />
                     </svg>
                     Login with Google
-                </Button>)}
+                </Button>
+            )}
         </div>
 
     )
