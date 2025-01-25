@@ -29,6 +29,7 @@ import {
 import Link from "next/link"
 import { signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
+import { Skeleton } from "./ui/skeleton"
 
 
 // Menu items.
@@ -71,25 +72,43 @@ const handleLogout = async () => {
 export function AppSidebar() {
 
   const [nome, setNome] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        const dataUser = localStorage.getItem("usuario");
-        if (dataUser) {
-            // Fazendo o parsing correto do JSON
-            const parsedData = JSON.parse(dataUser);
-            // Pegando apenas o nome
-            const nome = parsedData.nome;
-            setNome(nome); // Atualizando o estado com o nome
-        }
-    }, [])
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const dataUser = localStorage.getItem("usuario");
+      if (dataUser) {
+        const parsedData = JSON.parse(dataUser);
+        const nome = parsedData.nome
+        setNome(nome)
+      }
+      setLoading(false)
+    }, 800)
+
+    return () => clearTimeout(timer)
+  }, [])
 
 
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
       <SidebarContent className="bg-neutral-900">
         <SidebarGroup className="mt-2">
+
           <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold">
-            <NotebookPen /> <span className="text-neutral-200">{nome}'s</span> Notes
+            <NotebookPen /> <span className="text-neutral-200">
+
+              {loading ? (
+                <>
+                  <Skeleton className="h-5 w-20 rounded-[4px]" />
+                </>
+              ) : (
+                <>
+                  {nome}'s
+                </>
+
+              )}
+
+            </span> Notes
           </SidebarGroupLabel>
 
           <SidebarMenuButton className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
