@@ -13,7 +13,7 @@ const GoogleLoginButton = () => {
     const handleGoogleLogin = async () => {
         setLoading(true)
         try {
-            const result = await signIn('google')
+            const result = await signIn('google', { redirect: false })
 
             if (result?.error) {
                 console.error('Erro na autenticação com Google:', result.error)
