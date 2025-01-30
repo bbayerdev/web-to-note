@@ -2,6 +2,7 @@
 import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
 import Confetti, { ConfettiRef } from "@/components/ui/confetti";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -11,11 +12,11 @@ import { useRef } from "react";
 export default function page() {
     useEffect(() => {
         const teste_logado = localStorage.getItem('usuario')
-    
+
         if (!teste_logado) {
-          window.location.href = '/login'
+            window.location.href = '/login'
         }
-      }, [])
+    }, [])
 
     const { resolvedTheme } = useTheme();
     const [color, setColor] = useState("#ffffff");
@@ -25,31 +26,47 @@ export default function page() {
     }, [resolvedTheme])
 
     const [nome, setNome] = useState("")
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const dataUser = localStorage.getItem("usuario");
-        if (dataUser) {
-            // Fazendo o parsing correto do JSON
-            const parsedData = JSON.parse(dataUser);
-            // Pegando apenas o nome
-            const nome = parsedData.nome;
-            setNome(nome); // Atualizando o estado com o nome
-        }
-    }, [])
+        const timer = setTimeout(() => {
+            const dataUser = localStorage.getItem("usuario");
+            if (dataUser) {
+                const parsedData = JSON.parse(dataUser);
+                const nome = parsedData.nome
+                setNome(nome)
+            }
+            setLoading(false)
+        }, 300)
 
-    console.log(nome)
+        return () => clearTimeout(timer)
+    }, [])
 
     const confettiRef = useRef<ConfettiRef>(null);
 
     return (
         <main className="flex h-screen flex-col justify-center items-center font-[family-name:var(--font-geist-sans)]">
             <section className="space-y-4 z-10">
+                <div className="flex flex-row w-full">
+                    <h1 className="text-3xl font-bold flex flex-row justify-center items-center"> Welcome to To-Note
 
-                <h1 className="text-3xl font-bold"> Welcome to To-Note
-                    <span className="ml-2">
-                        {nome}
-                    </span> !
-                </h1>
+                        {loading ?
+                            (
+                                <>
+                                    <Skeleton className="h-7 w-28 ml-2 rounded-[4px]" />
+                                </>
+                            ) : (
+                                <>
+                                    <span className="ml-2"></span>
+                                    {nome}!
+                                </>
+                            )
+                        }
+
+                    </h1>
+                </div>
+
+
                 <p className="font-[family-name:var(--font-geist-mono)]"> Your journey to organizing your ideas and notes starts now. </p>
 
                 <h1 className="text-2xl font-bold"> What can you do with To-Note? </h1>
