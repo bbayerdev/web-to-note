@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { BookUser, LoaderCircle, LogOut, Settings, Sun, Trash, User } from 'lucide-react'
+import { LoaderCircle, LogOut, User } from 'lucide-react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,14 +28,6 @@ const IcoUser = () => {
             setName(parsedData.nome)
         }
     }, [])
-
-    if (!isClient) {
-        return (
-            <Avatar className="size-8">
-                <AvatarFallback> <LoaderCircle className="animate-spin size-4" /> </AvatarFallback>
-            </Avatar>
-        )
-    }
 
     const handleLogout = async () => {
         await signOut({ redirect: false })
@@ -68,7 +60,6 @@ const IcoUser = () => {
                             <AlertDialogDescription>
                                 Logging out will end your session, and you will need to log in again to access your account of <span className="italic">To-Note</span>.
                             </AlertDialogDescription>
-
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel className="rounded-[6px]">Cancel</AlertDialogCancel>
@@ -78,7 +69,6 @@ const IcoUser = () => {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-
 
             </DropdownMenuContent>
         </DropdownMenu>
