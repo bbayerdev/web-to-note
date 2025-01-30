@@ -138,7 +138,7 @@ export function AppSidebar() {
                       <DropdownMenuItem className="rounded-[6px]">
                         <span>View Note</span> <Telescope />
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="group rounded-[6px] hover:text-red-500">
+                      <DropdownMenuItem className="group rounded-[6px] text-red-500">
                         <span>Delete Project</span> <Bomb />
                       </DropdownMenuItem>
                     </DropdownMenuContent>
