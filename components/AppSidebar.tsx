@@ -84,19 +84,25 @@ export function AppSidebar() {
   const date = now.toLocaleDateString("en-US")
   const hour = now.toTimeString().slice(0, 5)
 
+  const updateNotes = (newNote: Note) => {
+    setNotes(prevNotes => [...prevNotes, newNote]); // Adiciona a nova nota à lista
+  }
+  
   async function newNote(e: React.FormEvent) {
     e.preventDefault()
     if (!idUser) return
 
     try {
       const res = await axios.post("http://localhost:3001/note", {
-        tittle: 'New not',
+        tittle: 'New Note',
         body: null,
         date: date,
         hour: hour,
         idUser: idUser,
       })
       console.log("Nota criada com sucesso", res.data)
+      updateNotes(res.data)
+      router.push(`/note/${res.data.id}`)
     } catch (error) {
       console.error("Erro ao salvar a nota", error)
     }

@@ -4,7 +4,6 @@ import { Textarea } from "@/components/ui/textarea"
 import axios from "axios"
 import { Check } from "lucide-react"
 import { useParams } from "next/navigation"
-import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 
 export default function NotePage() {
@@ -19,8 +18,6 @@ export default function NotePage() {
     }
   }, [])
 
-  const [title, setTitle] = useState("To-Note // your title page principal")
-  const [body, setBody] = useState("")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const lastTextareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -43,14 +40,19 @@ export default function NotePage() {
     }
   }, [])
 
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+
   //async get notes by ad by router
   const { id } = useParams()
-  const [note, setNote] = useState(null)
 
   useEffect(() => {
     if (id) {
       axios.get(`http://localhost:3001/note/${id}`)
-        .then(response => setNote(response.data))
+        .then(response => {
+          setTitle(response.data.tittle || 'New Note'),
+          setBody(response.data.body || '')
+        })
         .catch(error => console.error("Erro ao buscar nota:", error));
     }
   }, [id])
@@ -90,7 +92,6 @@ export default function NotePage() {
                 const target = e.target as HTMLTextAreaElement
                 target.style.height = "auto"
                 target.style.height = `${target.scrollHeight}px`
-                setBody(target.value)
               }}
               className="text-xl font-bold border-none focus:outline-none focus:ring-0 w-full resize-none font-[family-name:var(--font-geist-mono)]"
             />

@@ -1,7 +1,4 @@
 'use client'
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Check } from "lucide-react"
 export default function NotePage() {
 
   return (
