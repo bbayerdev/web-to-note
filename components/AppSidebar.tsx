@@ -109,6 +109,18 @@ export function AppSidebar() {
   }
   const router = useRouter()
 
+  //async delete note
+  async function  deleteNote(id: string) {
+    try{
+      const res = await axios.delete(`http://localhost:3001/note/${id}`)
+      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id))
+    }
+    catch{
+
+    }
+  }
+
+
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
       <SidebarContent className="bg-neutral-900">
@@ -171,7 +183,7 @@ export function AppSidebar() {
                           <DropdownMenuItem className="rounded-[6px]">
                             <span>View Note</span> <Telescope />
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="group rounded-[6px] text-red-500">
+                          <DropdownMenuItem className="group rounded-[6px] text-red-500"  onClick={() => deleteNote(note.id)}>
                             <span>Delete Project</span> <Bomb />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
