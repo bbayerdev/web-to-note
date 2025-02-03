@@ -32,6 +32,8 @@ import { useEffect, useState } from "react"
 import { Skeleton } from "./ui/skeleton"
 import Name from "./Name"
 import axios from "axios"
+import router from "next/router"
+import { useRouter } from "next/navigation"
 
 const handleLogout = async () => {
   await signOut({ redirect: false })
@@ -77,6 +79,29 @@ export function AppSidebar() {
     setLoading(false)
   }, [idUser])
 
+  // async new note
+  const now = new Date()
+  const date = now.toLocaleDateString("en-US")
+  const hour = now.toTimeString().slice(0, 5)
+
+  async function newNote(e: React.FormEvent) {
+    e.preventDefault()
+    if (!idUser) return
+
+    try {
+      const res = await axios.post("http://localhost:3001/note", {
+        tittle: 'New not',
+        body: null,
+        date: date,
+        hour: hour,
+        idUser: idUser,
+      })
+      console.log("Nota criada com sucesso", res.data)
+    } catch (error) {
+      console.error("Erro ao salvar a nota", error)
+    }
+  }
+  const router = useRouter()
 
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
@@ -89,7 +114,7 @@ export function AppSidebar() {
             </span> Notes
           </SidebarGroupLabel>
 
-          <SidebarMenuButton className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
+          <SidebarMenuButton onClick={newNote} className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
             <a href="/note">
               <FilePlus2 strokeWidth={3} color="#22c55e" />
               <span className="text-green-500 font-bold">Create new note</span>
@@ -119,12 +144,12 @@ export function AppSidebar() {
                 <SidebarMenu className="mt-3">
                   {notes.map((note, index) => (
                     <SidebarMenuItem key={note.id}>
-                      <SidebarMenuButton className="rounded-[6px]" asChild>
-                        <a href="#">
-                          <File />
-                          <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
-                          <span>{note.tittle}</span>
-                        </a>
+                      <SidebarMenuButton className="rounded-[6px]" onClick={() => router.push(`/note/${note.id}`)}>
+
+                        <File />
+                        <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
+                        <span>{note.tittle}</span>
+
                       </SidebarMenuButton>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
