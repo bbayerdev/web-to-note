@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Bomb, File, FilePlus2, LogOut, MoreHorizontal, NotebookPen, Telescope } from "lucide-react"
+import { Bomb, File, FilePlus2, Loader, LogOut, MoreHorizontal, NotebookPen, Telescope } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Button } from "./ui/button"
@@ -57,8 +57,9 @@ export function AppSidebar() {
       setIdUser(id)
     }
   }, [])
- 
+
   const [notes, setNotes] = useState<Note[]>([])
+  const [loading, setLoading] = useState(true)
 
   //async que puxa os notes do user
   useEffect(() => {
@@ -73,6 +74,7 @@ export function AppSidebar() {
       }
     }
     fetchNotas()
+    setLoading(false)
   }, [idUser])
 
 
@@ -88,45 +90,66 @@ export function AppSidebar() {
           </SidebarGroupLabel>
 
           <SidebarMenuButton className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
-            <a href="/">
+            <a href="/note">
               <FilePlus2 strokeWidth={3} color="#22c55e" />
               <span className="text-green-500 font-bold">Create new note</span>
             </a>
           </SidebarMenuButton>
 
           <SidebarGroupContent>
-            <SidebarMenu className="mt-3">
-              {notes.map((note, index) => (
-                <SidebarMenuItem key={note.id}>
-                  <SidebarMenuButton className="rounded-[6px]" asChild>
-                    <a href="#">
-                      <File />
-                      <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
-                      <span>{note.tittle}</span>
-                    </a>
-                  </SidebarMenuButton>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuAction className="rounded-[6px]">
-                        <MoreHorizontal />
-                      </SidebarMenuAction>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="font-[family-name:var(--font-geist-sans)] rounded-[6px]"
-                      side="right"
-                      align="start"
-                    >
-                      <DropdownMenuItem className="rounded-[6px]">
-                        <span>View Note</span> <Telescope />
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="group rounded-[6px] text-red-500">
-                        <span>Delete Project</span> <Bomb />
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+
+            {notes.length === 0 ? (
+              <>
+                <div className="flex justify-center items-center mt-4 ml-2">
+                  <p>You don't have any notes created yet. Create a new one to get started!</p>
+                </div>
+              </>
+            ) : (
+              null
+            )}
+
+            {loading ? (
+              <>
+                <div className="flex justify-center items-center">
+                  <Loader className="animate-spin size-4 mt-5" />
+                </div>
+              </>
+            ) : (
+              <>
+                <SidebarMenu className="mt-3">
+                  {notes.map((note, index) => (
+                    <SidebarMenuItem key={note.id}>
+                      <SidebarMenuButton className="rounded-[6px]" asChild>
+                        <a href="#">
+                          <File />
+                          <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
+                          <span>{note.tittle}</span>
+                        </a>
+                      </SidebarMenuButton>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <SidebarMenuAction className="rounded-[6px]">
+                            <MoreHorizontal />
+                          </SidebarMenuAction>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          className="font-[family-name:var(--font-geist-sans)] rounded-[6px]"
+                          side="right"
+                          align="start"
+                        >
+                          <DropdownMenuItem className="rounded-[6px]">
+                            <span>View Note</span> <Telescope />
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="group rounded-[6px] text-red-500">
+                            <span>Delete Project</span> <Bomb />
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </>
+            )}
 
           </SidebarGroupContent>
         </SidebarGroup>
