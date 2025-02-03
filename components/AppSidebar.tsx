@@ -30,62 +30,50 @@ import Link from "next/link"
 import { signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { Skeleton } from "./ui/skeleton"
-
-
-// Menu items.
-const items = [
-  {
-    title: "Alimentação para melhorar o desempenho no treino",
-    url: "#",
-    number: 1
-  },
-  {
-    title: "Estratégias para aumentar a resistência cardiovascular",
-    url: "#",
-    number: 2
-  },
-  {
-    title: "Checklist de exercícios para treino de pernas",
-    url: "#",
-    number: 3
-  },
-  {
-    title: "Monitoramento de evolução: peso e medidas mensais",
-    url: "#",
-    number: 4
-  },
-  {
-    title: "Plano de treino para ganhar massa muscular",
-    url: "#",
-    number: 5
-  },
-
-]
+import Name from "./Name"
+import axios from "axios"
 
 const handleLogout = async () => {
   await signOut({ redirect: false })
   window.location.href = '/login'
 }
 
+interface Note {
+  id: string;
+  tittle: string;
+  body: string;
+  date: string;
+  hour: string;
+  idUser: string;
+}
 
 export function AppSidebar() {
-
-  const [nome, setNome] = useState(null)
-  const [loading, setLoading] = useState(true)
-
+  const [idUser, setIdUser] = useState<string | undefined>()
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const dataUser = localStorage.getItem("usuario");
-      if (dataUser) {
-        const parsedData = JSON.parse(dataUser);
-        const nome = parsedData.nome
-        setNome(nome)
-      }
-      setLoading(false)
-    }, 300)
-
-    return () => clearTimeout(timer)
+    const dataUser = localStorage.getItem("usuario")
+    if (dataUser) {
+      const parsedData = JSON.parse(dataUser)
+      const id = parsedData.id
+      setIdUser(id)
+    }
   }, [])
+ 
+  const [notes, setNotes] = useState<Note[]>([])
+
+  //async que puxa os notes do user
+  useEffect(() => {
+    const fetchNotas = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/usuario/${idUser}/notes`)
+        setNotes(res.data)
+        console.log(notes)
+      }
+      catch {
+
+      }
+    }
+    fetchNotas()
+  }, [idUser])
 
 
   return (
@@ -95,18 +83,7 @@ export function AppSidebar() {
 
           <SidebarGroupLabel className="font-[family-name:var(--font-geist-sans)] text-xl gap-2 font-bold">
             <NotebookPen /> <span className="text-neutral-200">
-
-              {loading ? (
-                <>
-                  <Skeleton className="h-5 w-20 rounded-[4px]" />
-                </>
-              ) : (
-                <>
-                  {nome}'s
-                </>
-
-              )}
-
+              <Name />
             </span> Notes
           </SidebarGroupLabel>
 
@@ -118,14 +95,14 @@ export function AppSidebar() {
           </SidebarMenuButton>
 
           <SidebarGroupContent>
-
             <SidebarMenu className="mt-3">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {notes.map((note, index) => (
+                <SidebarMenuItem key={note.id}>
                   <SidebarMenuButton className="rounded-[6px]" asChild>
                     <a href="#">
                       <File />
-                      <span className="text-neutral-600 font-bold">{item.number}#</span> <span>{item.title}</span>
+                      <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
+                      <span>{note.tittle}</span>
                     </a>
                   </SidebarMenuButton>
                   <DropdownMenu>
@@ -134,7 +111,11 @@ export function AppSidebar() {
                         <MoreHorizontal />
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="font-[family-name:var(--font-geist-sans)] rounded-[6px]" side="right" align="start">
+                    <DropdownMenuContent
+                      className="font-[family-name:var(--font-geist-sans)] rounded-[6px]"
+                      side="right"
+                      align="start"
+                    >
                       <DropdownMenuItem className="rounded-[6px]">
                         <span>View Note</span> <Telescope />
                       </DropdownMenuItem>
@@ -146,6 +127,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
