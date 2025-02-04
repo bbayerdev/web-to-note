@@ -92,6 +92,7 @@ export default function NotePage() {
                 const target = e.target as HTMLTextAreaElement
                 target.style.height = "auto"
                 target.style.height = `${target.scrollHeight}px`
+                setBody(target.value)
               }}
               className="text-xl font-bold border-none focus:outline-none focus:ring-0 w-full resize-none font-[family-name:var(--font-geist-mono)]"
             />
