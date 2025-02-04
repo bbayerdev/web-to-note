@@ -66,17 +66,19 @@ export function AppSidebar() {
   //async que puxa os notes do user
   useEffect(() => {
     const fetchNotas = async () => {
+      if (!idUser) return
+      setLoading(true)
       try {
         const res = await axios.get(`http://localhost:3001/usuario/${idUser}/notes`)
         setNotes(res.data)
-        console.log(notes)
       }
       catch {
-
+      }
+      finally{
+        setLoading(false)
       }
     }
     fetchNotas()
-    setLoading(false)
   }, [idUser])
 
   // async new note
@@ -85,9 +87,9 @@ export function AppSidebar() {
   const hour = now.toTimeString().slice(0, 5)
 
   const updateNotes = (newNote: Note) => {
-    setNotes(prevNotes => [...prevNotes, newNote]); // Adiciona a nova nota à lista
+    setNotes(prevNotes => [...prevNotes, newNote])
   }
-  
+
   async function newNote(e: React.FormEvent) {
     e.preventDefault()
     if (!idUser) return
@@ -110,12 +112,12 @@ export function AppSidebar() {
   const router = useRouter()
 
   //async delete note
-  async function  deleteNote(id: string) {
-    try{
+  async function deleteNote(id: string) {
+    try {
       const res = await axios.delete(`http://localhost:3001/note/${id}`)
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id))
     }
-    catch{
+    catch {
 
     }
   }
@@ -140,15 +142,12 @@ export function AppSidebar() {
           </SidebarMenuButton>
 
           <SidebarGroupContent>
-
-            {notes.length === 0 ? (
+          {!loading && notes.length === 0 && (
               <>
                 <div className="flex justify-center items-center mt-4 ml-2">
                   <p>You don't have any notes created yet. Create a new one to get started!</p>
                 </div>
               </>
-            ) : (
-              null
             )}
 
             {loading ? (
@@ -183,7 +182,7 @@ export function AppSidebar() {
                           <DropdownMenuItem className="rounded-[6px]">
                             <span>View Note</span> <Telescope />
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="group rounded-[6px] text-red-500"  onClick={() => deleteNote(note.id)}>
+                          <DropdownMenuItem className="group rounded-[6px] text-red-500" onClick={() => deleteNote(note.id)}>
                             <span>Delete Project</span> <Bomb />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -193,6 +192,7 @@ export function AppSidebar() {
                 </SidebarMenu>
               </>
             )}
+
 
           </SidebarGroupContent>
         </SidebarGroup>
