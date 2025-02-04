@@ -74,7 +74,7 @@ export function AppSidebar() {
       }
       catch {
       }
-      finally{
+      finally {
         setLoading(false)
       }
     }
@@ -112,13 +112,25 @@ export function AppSidebar() {
   const router = useRouter()
 
   //async delete note
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
+
+  const handleNote = (idNote: string) => {
+    setActiveNoteId(idNote)
+    router.push(`/note/${idNote}`)
+  }
+
   async function deleteNote(id: string) {
     try {
       const res = await axios.delete(`http://localhost:3001/note/${id}`)
+
+      if (id === activeNoteId) {
+        setActiveNoteId(null)
+        router.push("/note")
+      }
+
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id))
     }
     catch {
-
     }
   }
 
@@ -142,7 +154,7 @@ export function AppSidebar() {
           </SidebarMenuButton>
 
           <SidebarGroupContent>
-          {!loading && notes.length === 0 && (
+            {!loading && notes.length === 0 && (
               <>
                 <div className="flex justify-center items-center mt-4 ml-2">
                   <p>You don't have any notes created yet. Create a new one to get started!</p>
@@ -161,7 +173,9 @@ export function AppSidebar() {
                 <SidebarMenu className="mt-3">
                   {notes.map((note, index) => (
                     <SidebarMenuItem key={note.id}>
-                      <SidebarMenuButton className="rounded-[6px]" onClick={() => router.push(`/note/${note.id}`)}>
+                      <SidebarMenuButton className={`rounded-[6px] ${activeNoteId === note.id ? "bg-muted" : ""
+                        }`}
+                        onClick={() => handleNote(note.id)}>
 
                         <File />
                         <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
