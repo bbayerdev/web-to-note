@@ -97,7 +97,7 @@ export function AppSidebar() {
     try {
       const res = await axios.post("http://localhost:3001/note", {
         tittle: 'New Note',
-        body: null,
+        body: [{ type: 'paragraph', children: [{ text: 'New Note' }] }],
         date: date,
         hour: hour,
         idUser: idUser,
