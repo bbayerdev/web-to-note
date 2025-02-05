@@ -1,10 +1,10 @@
 'use client'
-import localFont from "next/font/local";
 import "../globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import IcoUser from "@/components/IcoUser";
 import { useEffect } from "react";
+import NextTopLoader from "nextjs-toploader";
 
 export default function RootLayout({
   children,
@@ -23,6 +23,7 @@ export default function RootLayout({
 
   return (
     <div>
+      <NextTopLoader color="#3b82f6" initialPosition={0.3} height={2} showSpinner={false} />
       <SidebarProvider>
         <AppSidebar />
 

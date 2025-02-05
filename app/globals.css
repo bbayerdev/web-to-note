@@ -60,3 +60,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.ProseMirror {
+  background-color: #0a0a0a !important; /* Tailwind neutral-950 */
+}
+
