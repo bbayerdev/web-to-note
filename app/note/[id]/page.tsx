@@ -13,6 +13,9 @@ const BlockNoteEditor = dynamic(() => import('../../../components/BlockNoteEdito
 export default function NotePage() {
   const [idUser, setIdUser] = useState<string | undefined>();
   const { id } = useParams();
+  const noteId = Array.isArray(id) ? id[0] : id ?? ''; // Usa '' como fallback se `id` for undefined
+
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -32,7 +35,7 @@ export default function NotePage() {
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
       <div className="px-40 py-14 gap-5 flex flex-col">
-        <BlockNoteEditor />
+        {id && <BlockNoteEditor noteId={noteId} />}
       </div>
     </main>
   );
