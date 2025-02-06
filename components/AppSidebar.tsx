@@ -42,8 +42,7 @@ const handleLogout = async () => {
 
 interface Note {
   id: string;
-  tittle: string;
-  body: string;
+  title: string;
   date: string;
   hour: string;
   idUser: string;
@@ -85,7 +84,10 @@ export function AppSidebar() {
   const now = new Date()
   const date = now.toLocaleDateString("en-US")
   const hour = now.toTimeString().slice(0, 5)
-
+  const defaultContent = [
+    { type: "paragraph", content: "Sua nova nota aqui!" }
+  ]
+  
   const updateNotes = (newNote: Note) => {
     setNotes(prevNotes => [...prevNotes, newNote])
   }
@@ -95,12 +97,11 @@ export function AppSidebar() {
     if (!idUser) return
 
     try {
-      const res = await axios.post("http://localhost:3001/note", {
-        tittle: 'New Note',
-        body: [{ type: 'paragraph', children: [{ text: 'New Note' }] }],
+      const res = await axios.post(`http://localhost:3001/usuario/${idUser}/notes`, {
+        title: 'New Note',
+        content: defaultContent,
         date: date,
         hour: hour,
-        idUser: idUser,
       })
       console.log("Nota criada com sucesso", res.data)
       updateNotes(res.data)
@@ -187,7 +188,7 @@ export function AppSidebar() {
 
                         <File />
                         <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
-                        <span>{note.tittle}</span>
+                        <span>{note.title}</span>
 
                       </SidebarMenuButton>
                       <DropdownMenu>
