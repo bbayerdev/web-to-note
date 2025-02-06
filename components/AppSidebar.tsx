@@ -85,9 +85,10 @@ export function AppSidebar() {
   const date = now.toLocaleDateString("en-US")
   const hour = now.toTimeString().slice(0, 5)
   const defaultContent = [
+    { type: "heading", level: 1, content: "Title of note" },
     { type: "paragraph", content: "Sua nova nota aqui!" }
   ]
-  
+
   const updateNotes = (newNote: Note) => {
     setNotes(prevNotes => [...prevNotes, newNote])
   }
@@ -98,7 +99,6 @@ export function AppSidebar() {
 
     try {
       const res = await axios.post(`http://localhost:3001/usuario/${idUser}/notes`, {
-        title: 'New Note',
         content: defaultContent,
         date: date,
         hour: hour,

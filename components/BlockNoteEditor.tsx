@@ -8,7 +8,6 @@ import { Block } from "@blocknote/core";
 
 interface Note {
   id: string;
-  title: string
   content: Block[]; // Garante que o conteúdo será um array de blocos
   date: string;
   hour: string;
@@ -51,7 +50,7 @@ const BlockNoteEditor = () => {
 
   return (
     <div>
-      <h1>Editando Nota: {note?.title || 'Carregando...'}</h1>
+      <h1>Editando Nota: {note?.id || 'Carregando...'}</h1>
       <BlockNoteView editor={editor} />
     </div>
   );
