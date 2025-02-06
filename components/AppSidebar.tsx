@@ -104,6 +104,7 @@ export function AppSidebar() {
       })
       console.log("Nota criada com sucesso", res.data)
       updateNotes(res.data)
+      setActiveNoteId(res.data.id)
       router.push(`/note/${res.data.id}`)
     } catch (error) {
       console.error("Erro ao salvar a nota", error)
