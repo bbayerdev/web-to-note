@@ -73,33 +73,8 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
     }
   }, [editor])
 
-  // async new title
-  const [title, setTitle] = useState("");
-  useEffect(() => {
-    if (note?.title) {
-      setTitle(note.title)
-    }
-  }, [note])
-
-  async function newTitle() {
-    const res = await axios.put(`http://localhost:3001/note/title/${noteId}`, {
-      title: title
-    })
-  }
-
   return (
     <main>
-      <div className="flex items-center">
-        <ChevronRight size={16} />
-        <Input
-          className="focus:outline-none focus:ring-0 focus:border-transparent italic"
-          value={title} // O input reflete o estado
-          onChange={(e) => setTitle(e.target.value)} // Atualiza o estado ao digitar
-          onBlur={newTitle}
-          onFocus={(e) => e.target.select()}
-        />
-      </div>
-
       <div className="mt-4 px-8">
         <BlockNoteView editor={editor} />
       </div>

@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Bomb, File, FilePlus2, Loader, LogOut, MoreHorizontal, NotebookPen, Telescope } from "lucide-react"
+import { Bomb, File, FilePlus2, Loader, LogOut, MoreHorizontal, NotebookPen, Pencil, Telescope } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Button } from "./ui/button"
@@ -27,11 +27,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { signOut } from "next-auth/react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Name from "./Name"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 import { title } from "node:process"
+import { Input } from "./ui/input"
 
 const handleLogout = async () => {
   await signOut({ redirect: false })
@@ -47,6 +48,7 @@ interface Note {
 }
 
 export function AppSidebar() {
+
   const [idUser, setIdUser] = useState<string | undefined>()
   useEffect(() => {
     const dataUser = localStorage.getItem("usuario")
@@ -117,7 +119,7 @@ export function AppSidebar() {
   )
 
   useEffect(() => {
-    if (activeNoteId) { 
+    if (activeNoteId) {
       localStorage.setItem("activeNoteId", activeNoteId);
     }
   }, [activeNoteId])
@@ -140,6 +142,39 @@ export function AppSidebar() {
     catch {
     }
   }
+
+  //async edit name note
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const handleEdit = (id: string) => {
+    setEditingId(id);
+  }
+
+  const [editableTitles, setEditableTitles] = useState<{ [key: string]: string }>({});
+  const handleTitleChange = (id: string, newTitle: string) => {
+    setEditableTitles(prevTitles => ({ ...prevTitles, [id]: newTitle }));
+  }
+
+  const updateTitle = async (id: string) => {
+    if (!editableTitles[id]) return;
+
+    try {
+      await axios.put(`http://localhost:3001/note/title/${id}`, {
+        title: editableTitles[id],
+      });
+
+      setNotes(prevNotes =>
+        prevNotes.map(note =>
+          note.id === id ? { ...note, title: editableTitles[id] } : note
+        )
+      )
+    } catch (error) {
+      console.error("Erro ao atualizar o título", error);
+    } finally {
+      setEditingId(null); // Sai do modo de edição ao terminar
+    }
+  }
+
 
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
@@ -181,9 +216,28 @@ export function AppSidebar() {
                     <SidebarMenuItem key={note.id}>
                       <SidebarMenuButton className={`rounded-[6px] ${activeNoteId === note.id ? "bg-muted" : ""}`} onClick={() => handleNote(note.id)}>
 
-                        <File />
-                        <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
-                        <span>{note.title}</span>
+                        {editingId === note.id ? (
+                          <>
+                            <File />
+                            <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
+                            <input
+                              ref={inputRef} // Passa a ref para o input
+                              type="text"
+                              value={editableTitles[note.id] ?? note.title}
+                              onChange={(e) => handleTitleChange(note.id, e.target.value)}
+                              onBlur={() => updateTitle(note.id)}
+                              onKeyDown={(e) => e.key === "Enter" && updateTitle(note.id)}
+                              className="bg-transparent outline-none border-b border-neutral-500 w-full"
+                              onFocus={(e) => e.target.select()}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <File />
+                            <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
+                            <span>{note.title}</span>
+                          </>
+                        )}
 
                       </SidebarMenuButton>
                       <DropdownMenu>
@@ -197,6 +251,9 @@ export function AppSidebar() {
                           side="right"
                           align="start"
                         >
+                          <DropdownMenuItem className="rounded-[6px]" onClick={() => handleEdit(note.id)}>
+                            <span>Edit name</span> <Pencil />
+                          </DropdownMenuItem>
                           <DropdownMenuItem className="rounded-[6px]" onClick={() => handleNote(note.id)}>
                             <span>View Note</span> <Telescope />
                           </DropdownMenuItem>
