@@ -11,7 +11,7 @@ export default function NotePage() {
 
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
-      <div className="px-10 flex flex-col">
+      <div className="px-10 pt-5 flex flex-col">
         {id && <BlockNoteEditor noteId={noteId} />}
       </div>
     </main>
