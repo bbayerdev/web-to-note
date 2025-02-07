@@ -5,6 +5,8 @@ import { BlockNoteView } from "@blocknote/mantine"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Block } from "@blocknote/core"
+import { ChevronRight, Slash } from "lucide-react"
+import { Input } from "./ui/input"
 
 interface Note {
   id: string
@@ -61,14 +63,34 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
   }
   if (!editor) return null
 
+  useEffect(() => {
+    if (editor) {
+      const interval = setInterval(() => {
+        handleUpdateContent();
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [editor])
+
+  const [title, setTitle] = useState("")
+  useEffect(() => {
+    setTitle(note?.title || 'loding')
+  }, [note])
+
   return (
     <main>
-      <div className="flex justify-between">
-        <h1>Editando Nota: {note?.title || ''}</h1>
-        <button className="bg-white" onClick={handleUpdateContent}>Salvar</button>
+      <div className="flex items-center">
+        <ChevronRight size={16} />
+        <Input
+          className="focus:outline-none focus:ring-0 focus:border-transparent italic"
+          value={title} // O input reflete o estado
+          onChange={(e) => setTitle(e.target.value)} // Atualiza o estado ao digitar
+        />
       </div>
 
-      <BlockNoteView editor={editor} />
+      <div className="mt-4 px-8">
+        <BlockNoteView editor={editor} />
+      </div>
     </main>
   )
 }

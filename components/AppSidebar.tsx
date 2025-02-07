@@ -83,8 +83,8 @@ export function AppSidebar() {
   const date = now.toLocaleDateString("en-US")
   const hour = now.toTimeString().slice(0, 5)
   const defaultContent = [
-    { type: "heading", level: 1, content: "Title of note" },
-    { type: "paragraph", content: "Sua nova nota aqui!" }
+    { type: "heading", level: 1, content: "Untitled Note" },
+    { type: "paragraph", content: "" },
   ]
 
   const updateNotes = (newNote: Note) => {
@@ -197,7 +197,7 @@ export function AppSidebar() {
                           side="right"
                           align="start"
                         >
-                          <DropdownMenuItem className="rounded-[6px]">
+                          <DropdownMenuItem className="rounded-[6px]" onClick={() => handleNote(note.id)}>
                             <span>View Note</span> <Telescope />
                           </DropdownMenuItem>
                           <DropdownMenuItem className="group rounded-[6px] text-red-500" onClick={() => deleteNote(note.id)}>
