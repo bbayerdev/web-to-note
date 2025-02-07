@@ -26,14 +26,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import Link from "next/link"
 import { signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { Skeleton } from "./ui/skeleton"
 import Name from "./Name"
 import axios from "axios"
-import router from "next/router"
 import { useRouter } from "next/navigation"
+import { title } from "node:process"
 
 const handleLogout = async () => {
   await signOut({ redirect: false })
@@ -99,6 +97,7 @@ export function AppSidebar() {
 
     try {
       const res = await axios.post(`http://localhost:3001/usuario/${idUser}/notes`, {
+        title: 'New note',
         content: defaultContent,
         date: date,
         hour: hour,
@@ -112,14 +111,13 @@ export function AppSidebar() {
     }
   }
   const router = useRouter()
-
   //efeito note watch
   const [activeNoteId, setActiveNoteId] = useState<string | null>(
     () => typeof window !== "undefined" ? localStorage.getItem("activeNoteId") : null
   )
 
   useEffect(() => {
-    if (activeNoteId) {
+    if (activeNoteId) { 
       localStorage.setItem("activeNoteId", activeNoteId);
     }
   }, [activeNoteId])
@@ -133,18 +131,15 @@ export function AppSidebar() {
   async function deleteNote(id: string) {
     try {
       const res = await axios.delete(`http://localhost:3001/note/${id}`)
-
       if (id === activeNoteId) {
         setActiveNoteId(null)
         router.push("/note")
       }
-
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id))
     }
     catch {
     }
   }
-
 
   return (
     <Sidebar className=" font-[family-name:var(--font-geist-mono)]">
@@ -215,7 +210,6 @@ export function AppSidebar() {
                 </SidebarMenu>
               </>
             )}
-
 
           </SidebarGroupContent>
         </SidebarGroup>

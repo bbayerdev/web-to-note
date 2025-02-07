@@ -1,40 +1,17 @@
-// NotePage.tsx
 'use client'
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import axios from "axios";
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-import dynamic from "next/dynamic";
-
-// Importa o componente BlockNoteEditor de forma dinâmica
-const BlockNoteEditor = dynamic(() => import('../../../components/BlockNoteEditor'), { ssr: false });
+import { useParams } from "next/navigation"
+import "@blocknote/core/fonts/inter.css"
+import "@blocknote/mantine/style.css"
+import dynamic from "next/dynamic"
+const BlockNoteEditor = dynamic(() => import('../../../components/BlockNoteEditor'), { ssr: false }) // importa o blocknote dinamicamente
 
 export default function NotePage() {
-  const [idUser, setIdUser] = useState<string | undefined>();
-  const { id } = useParams();
-  const noteId = Array.isArray(id) ? id[0] : id ?? ''; // Usa '' como fallback se `id` for undefined
-
-
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const dataUser = localStorage.getItem("usuario");
-      if (dataUser) {
-        const parsedData = JSON.parse(dataUser);
-        const id = parsedData.id;
-        setIdUser(id);
-      }
-
-      if (id) {
-        axios.get(`http://localhost:3001/note/${id}`);
-      }
-    }
-  }, [id]);
+  const { id } = useParams()
+  const noteId = Array.isArray(id) ? id[0] : id ?? ''
 
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
-      <div className="px-40 py-14 gap-5 flex flex-col">
+      <div className="px-36 py-10 flex flex-col">
         {id && <BlockNoteEditor noteId={noteId} />}
       </div>
     </main>
