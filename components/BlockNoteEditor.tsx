@@ -39,7 +39,8 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
       }
     }
     fetchNote();
-  }, [noteId, editor]);
+  }, [noteId, editor])
+
 
   const handleUpdateContent = async () => {
     try {
@@ -67,15 +68,24 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
     if (editor) {
       const interval = setInterval(() => {
         handleUpdateContent();
-      }, 1000)
+      }, 4000)
       return () => clearInterval(interval)
     }
   }, [editor])
 
-  const [title, setTitle] = useState("")
+  // async new title
+  const [title, setTitle] = useState("");
   useEffect(() => {
-    setTitle(note?.title || 'loding')
+    if (note?.title) {
+      setTitle(note.title)
+    }
   }, [note])
+
+  async function newTitle() {
+    const res = await axios.put(`http://localhost:3001/note/title/${noteId}`, {
+      title: title
+    })
+  }
 
   return (
     <main>
@@ -85,6 +95,8 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
           className="focus:outline-none focus:ring-0 focus:border-transparent italic"
           value={title} // O input reflete o estado
           onChange={(e) => setTitle(e.target.value)} // Atualiza o estado ao digitar
+          onBlur={newTitle}
+          onFocus={(e) => e.target.select()}
         />
       </div>
 
