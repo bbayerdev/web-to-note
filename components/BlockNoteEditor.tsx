@@ -68,7 +68,7 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
     if (editor) {
       const interval = setInterval(() => {
         handleUpdateContent();
-      }, 4000)
+      }, 1000)
       return () => clearInterval(interval)
     }
   }, [editor])
