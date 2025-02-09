@@ -47,9 +47,11 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
       const document = editor.document
       // mapeia o conteudo do editor para o formato da api
       const updatedContent = document.map((block: Block) => ({
-        type: block.type,
-        content: block.content,
+        ...block, // Mantém todas as propriedades originais
       }))
+      
+
+      console.log("Enviando para API:", JSON.stringify(updatedContent, null, 2));
 
       await axios.put(`http://localhost:3001/note/${noteId}`, {
         content: updatedContent,
