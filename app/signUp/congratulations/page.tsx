@@ -30,10 +30,10 @@ export default function page() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const dataUser = localStorage.getItem("usuario");
+            const dataUser = localStorage.getItem("usuario")
             if (dataUser) {
-                const parsedData = JSON.parse(dataUser);
-                const nome = parsedData.nome
+                const parsedData = JSON.parse(dataUser)
+                const nome = parsedData.nome.split(" ")[0]
                 setNome(nome)
             }
             setLoading(false)

@@ -1,25 +1,22 @@
 'use client'
+import { useState, useEffect } from 'react';
 import "../globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import IcoUser from "@/components/IcoUser";
-import { useEffect } from "react";
 import NextTopLoader from "nextjs-toploader";
+import { Loader } from 'lucide-react';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isLoading, setIsLoading] = useState(true);
 
-  //se o user nao tiver logado ele redireciona
   useEffect(() => {
-    const teste_logado = localStorage.getItem('usuario')
-
-    if (!teste_logado) {
-      window.location.href = '/login'
-    }
-  }, [])
+    setIsLoading(false);
+  }, [children]);
 
   return (
     <div>
@@ -33,7 +30,13 @@ export default function RootLayout({
 
         <div className="flex flex-1 flex-col h-screen">
           <SidebarTrigger />
-          {children}
+          {isLoading ? (
+            <div className='flex justify-center items-center h-screen'>
+              <Loader className='animate-spin'/>
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </SidebarProvider>
     </div>

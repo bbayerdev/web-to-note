@@ -5,3 +5,16 @@ NEXTAUTH_URL=http://localhost:3000
 # Credenciais do Google
 GOOGLE_CLIENT_ID=823817377493-omn65as5ja0aanduqmeia76tg4rnf5nb.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET= <CLIENTSECRET>
+
+-- 
+
+usar mais tarde no layout do note: 
+
+  //se o user nao tiver logado ele redireciona
+  useEffect(() => {
+    const teste_logado = localStorage.getItem('usuario')
+
+    if (!teste_logado) {
+      window.location.href = '/login'
+    }
+  }, [])
