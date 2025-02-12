@@ -5,7 +5,7 @@ import { BlockNoteView } from "@blocknote/mantine"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Block } from "@blocknote/core"
-import { ChevronRight, Slash } from "lucide-react"
+import { ChevronRight, Loader, Slash } from "lucide-react"
 import { Input } from "./ui/input"
 
 interface Note {
@@ -20,6 +20,7 @@ interface Note {
 const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
   const [note, setNote] = useState<Note | null>(null);
   const editor = useCreateBlockNote();
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -38,19 +39,16 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
         console.error("Erro ao buscar a nota", error);
       }
     }
-    fetchNote();
+    fetchNote()
+    setLoading(false)
   }, [noteId, editor])
-
 
   const handleUpdateContent = async () => {
     try {
       const document = editor.document
-      // mapeia o conteudo do editor para o formato da api
       const updatedContent = document.map((block: Block) => ({
-        ...block, // Mantém todas as propriedades originais
+        ...block
       }))
-      
-
       console.log("Enviando para API:", JSON.stringify(updatedContent, null, 2));
 
       await axios.put(`http://localhost:3001/note/${noteId}`, {
@@ -77,9 +75,22 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
 
   return (
     <main>
-      <div className="mt-4 px-8">
-        <BlockNoteView editor={editor} />
-      </div>
+
+      {loading ? (
+        <>
+          <div className='flex justify-center items-center h-screen'>
+            <Loader className='animate-spin' />
+          </div>
+        </>
+      ) : (
+        <>
+
+          <div className="mt-4 px-8">
+            <BlockNoteView editor={editor} />
+          </div>
+        </>
+      )}
+
     </main>
   )
 }

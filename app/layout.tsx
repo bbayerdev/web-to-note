@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-neutral-200`}
       >
         <NextTopLoader color="#3b82f6" initialPosition={0.3} height={2} showSpinner={false} />
 

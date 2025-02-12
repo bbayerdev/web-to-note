@@ -1,9 +1,12 @@
 'use client'
+
+import { TypingAnimation } from "@/components/magicui/typing-animation"
+
 export default function NotePage() {
 
   return (
-    <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
-      <h1 className="ml-10">vc nao criou nenhuma nota ainda seu merda / essa pagina vai ficar lindona</h1>
+    <main className="flex flex-col h-screen items-center font-[family-name:var(--font-geist-sans)]">
+      <TypingAnimation className="mt-8 text-3xl">Every great idea starts with a note. How about writing something?</TypingAnimation>
     </main>
   )
 }

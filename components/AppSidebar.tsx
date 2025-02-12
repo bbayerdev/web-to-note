@@ -31,8 +31,6 @@ import { useEffect, useRef, useState } from "react"
 import Name from "./Name"
 import axios from "axios"
 import { useRouter } from "next/navigation"
-import { title } from "node:process"
-import { Input } from "./ui/input"
 
 const handleLogout = async () => {
   await signOut({ redirect: false })
