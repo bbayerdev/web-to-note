@@ -5,8 +5,7 @@ import { BlockNoteView } from "@blocknote/mantine"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Block } from "@blocknote/core"
-import { ChevronRight, Loader, Slash } from "lucide-react"
-import { Input } from "./ui/input"
+import { Loader } from "lucide-react"
 
 interface Note {
   id: string
