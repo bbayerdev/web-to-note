@@ -185,7 +185,7 @@ export function AppSidebar() {
             </span> Notes
           </SidebarGroupLabel>
 
-          <SidebarMenuButton onClick={newNote} className="rounded-[6px] mt-3 bg-green-500/20 hover:bg-green-500/15" asChild>
+          <SidebarMenuButton onClick={newNote} className="rounded-[6px] mt-3 bg-green-500/10 hover:bg-green-500/15" asChild>
             <a href="/note">
               <FilePlus2 strokeWidth={3} color="#22c55e" />
               <span className="text-green-500 font-bold">Create new note</span>
