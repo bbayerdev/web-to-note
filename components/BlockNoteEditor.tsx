@@ -84,7 +84,7 @@ const BlockNoteEditor = ({ noteId }: { noteId: string }) => {
       ) : (
         <>
 
-          <div className="mt-4 px-8">
+          <div className="mt-4 px-0 md:px-20">
             <BlockNoteView editor={editor} />
           </div>
         </>

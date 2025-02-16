@@ -72,7 +72,7 @@ export default function NotePage() {
       <section className="flex flex-row w-full px-4 sm:px-16 md:px-32 pt-10 md:pt-20 pb-20 gap-20 flex-wrap items-center justify-center sm:justify-start md:justify-start">
 
         <div>
-          <div className="flex gap-1 text-muted-foreground items-center">
+          <div className="flex gap-1 text-muted-foreground items-center ml-4 md:ml-0">
             {notes.length === 0 ? (
               <>
                 <CircleAlert size={16} strokeWidth={3} /> <span className="font-bold mt-px">You don't have any notes! Create one in the sidebar in less than 5 seconds now!</span>
