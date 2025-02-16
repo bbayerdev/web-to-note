@@ -1,10 +1,11 @@
 'use client'
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { CircleAlert, CirclePlus, Clock } from "lucide-react"
-import NoteCard from "@/components/noteCard"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import router from "next/router";
+import { File } from 'lucide-react'
 
 interface Note {
   id: string;
@@ -30,7 +31,7 @@ export default function NotePage() {
   //async que puxa os notes do user
   useEffect(() => {
     if (!idUser) return;
-  
+
     const fetchNotas = async () => {
       setLoading(true);
       try {
@@ -54,7 +55,12 @@ export default function NotePage() {
     const interval = setInterval(fetchNotas, 1200);
     return () => clearInterval(interval);
   }, [idUser]);
-  
+
+  const router = useRouter()
+  const handleNote = (idNote: string) => {
+    router.push(`/note/${idNote}`)
+  }
+
 
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
@@ -81,12 +87,19 @@ export default function NotePage() {
 
           <div className="grid grid-cols-3 gap-10 mt-6 ml-2">
             {notes.map(note => (
-              <NoteCard
-                key={note.id}
-                date={note.date}
-                hour={note.hour}
-                title={note.title}
-              />
+              <button key={note.id} className="size-40 rounded-3xl bg-neutral-900 flex flex-col justify-between p-5 hover:bg-neutral-900/80" onClick={() => handleNote(note.id)}>
+                <div className='flex justify-between'>
+                  <File size={30} />   <span className="text-xs font-bold text-muted-foreground">{note.hour}</span>
+                </div>
+                <div className="flex flex-col text-left gap-2">
+                  <span className="font-bold text-sm">{note.title}</span>
+
+                  <div className='flex gap-2'>
+                    <span className="text-xs font-bold text-muted-foreground">{note.date}</span>
+
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
         </div>
