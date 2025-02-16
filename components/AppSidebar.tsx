@@ -169,7 +169,7 @@ export function AppSidebar() {
     } catch (error) {
       console.error("Erro ao atualizar o título", error);
     } finally {
-      setEditingId(null); // Sai do modo de edição ao terminar
+      setEditingId(null)
     }
   }
 
@@ -219,7 +219,7 @@ export function AppSidebar() {
                             <File />
                             <span className="text-neutral-600 font-bold">{index + 1}#</span>{" "}
                             <input
-                              ref={inputRef} // Passa a ref para o input
+                              ref={inputRef}
                               type="text"
                               value={editableTitles[note.id] ?? note.title}
                               onChange={(e) => handleTitleChange(note.id, e.target.value)}
