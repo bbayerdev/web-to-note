@@ -65,12 +65,12 @@ export default function NotePage() {
   return (
     <main className="flex flex-col h-screen font-[family-name:var(--font-geist-sans)]">
 
-      <div className="flex justify-center">
-
-        <TypingAnimation duration={70} className="mt-8 text-3xl">Every great idea starts with a note. How about writing something?</TypingAnimation>
+      <div className="flex justify-center px-4 md:px-8">
+        <TypingAnimation duration={70} className="mt-8 text-xl md:text-3xl">Every great idea starts with a note. How about writing something?</TypingAnimation>
       </div>
 
-      <section className="flex flex-row w-full px-32 pt-20 pb-20 gap-20">
+      <section className="flex flex-row w-full px-4 sm:px-16 md:px-32 pt-10 md:pt-20 pb-20 gap-20 flex-wrap items-center justify-center sm:justify-start md:justify-start">
+
         <div>
           <div className="flex gap-1 text-muted-foreground items-center">
             {notes.length === 0 ? (
@@ -85,11 +85,13 @@ export default function NotePage() {
 
           </div>
 
-          <div className="grid grid-cols-3 gap-10 mt-6 ml-2">
+          <div className="flex flex-wrap gap-10 mt-6 ml-2 md:ml-0 md:grid md:grid-cols-5 justify-center">
+
             {notes.map(note => (
               <button key={note.id} className="size-40 rounded-3xl bg-neutral-900 flex flex-col justify-between p-5 hover:bg-neutral-900/80" onClick={() => handleNote(note.id)}>
-                <div className='flex justify-between'>
-                  <File size={30} />   <span className="text-xs font-bold text-muted-foreground">{note.hour}</span>
+                <div className='flex justify-between w-full'>
+                  <File size={30} />
+                  <span className="text-xs font-bold text-muted-foreground">{note.hour}</span>
                 </div>
                 <div className="flex flex-col text-left gap-2">
                   <span className="font-bold text-sm">{note.title}</span>
